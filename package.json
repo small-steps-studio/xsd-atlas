@@ -1,0 +1,286 @@
+{
+  "name": "xsd-atlas",
+  "displayName": "XSD Atlas",
+  "description": "XSD and WSDL explorer: outline, hover, go to definition, problems, sample XML. Pro: schema diff with breaking-change report, docs, SOAP samples. Works offline; only the licence check uses the network.",
+  "version": "0.1.0",
+  "publisher": "SmallStepsStudio",
+  "license": "SEE LICENSE IN LICENSE.txt",
+  "icon": "media/icon.png",
+  "pricing": "Trial",
+  "homepage": "https://github.com/small-steps-studio/xsd-atlas#readme",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/small-steps-studio/xsd-atlas"
+  },
+  "bugs": {
+    "url": "https://github.com/small-steps-studio/xsd-atlas/issues"
+  },
+  "galleryBanner": {
+    "color": "#1d3b2f",
+    "theme": "dark"
+  },
+  "engines": {
+    "vscode": "^1.82.0"
+  },
+  "categories": [
+    "Linters",
+    "Visualization",
+    "Other"
+  ],
+  "keywords": [
+    "xsd",
+    "wsdl",
+    "xml schema",
+    "schema",
+    "soap",
+    "schema diff",
+    "schema compare",
+    "breaking changes",
+    "xsd viewer",
+    "xsd outline",
+    "wsdl viewer",
+    "sample xml",
+    "xml instance",
+    "schema documentation",
+    "soap envelope",
+    "flatten xsd",
+    "xpath",
+    "go to definition",
+    "web services",
+    "integration",
+    "b2b",
+    "api contract",
+    "xml"
+  ],
+  "main": "./src/extension.js",
+  "capabilities": {
+    "untrustedWorkspaces": {
+      "supported": true
+    },
+    "virtualWorkspaces": {
+      "supported": "limited",
+      "description": "Compare With Git Revision needs files on a normal file system with a Git repository. Every other feature works in virtual workspaces."
+    }
+  },
+  "activationEvents": [
+    "onLanguage:xml",
+    "workspaceContains:**/*.xsd",
+    "workspaceContains:**/*.wsdl"
+  ],
+  "scripts": {
+    "test": "node --test",
+    "gate": "node scripts/release-gate.js",
+    "vscode:prepublish": "node scripts/release-gate.js --skip-tests --prepublish",
+    "package": "npx --yes @vscode/vsce package --no-dependencies",
+    "package:local": "node scripts/package-local.js",
+    "check-vsix": "node scripts/check-vsix.js"
+  },
+  "contributes": {
+    "commands": [
+      { "command": "xsdAtlas.checkFile", "title": "XSD Atlas: Check Current File" },
+      { "command": "xsdAtlas.copyPath", "title": "XSD Atlas: Copy Path At Cursor" },
+      { "command": "xsdAtlas.sampleXml", "title": "XSD Atlas: Create Sample XML" },
+      { "command": "xsdAtlas.openSampleSchema", "title": "XSD Atlas: Open Sample Schema" },
+      { "command": "xsdAtlas.openSampleSchemaV2", "title": "XSD Atlas: Open Sample Schema Version 2" },
+      { "command": "xsdAtlas.openSampleWsdl", "title": "XSD Atlas: Open Sample WSDL" },
+      { "command": "xsdAtlas.openWalkthrough", "title": "XSD Atlas: Open Getting Started Guide" },
+      { "command": "xsdAtlas.showDocumentation", "title": "XSD Atlas: Show Documentation" },
+      { "command": "xsdAtlas.reportProblem", "title": "XSD Atlas: Report A Problem" },
+      { "command": "xsdAtlas.refreshOutline", "title": "XSD Atlas: Refresh Outline", "icon": "$(refresh)" },
+      { "command": "xsdAtlas.revealRange", "title": "XSD Atlas: Reveal In Editor" },
+      { "command": "xsdAtlas.revealChange", "title": "XSD Atlas: Reveal Change" },
+      { "command": "xsdAtlas.clearComparison", "title": "XSD Atlas: Clear Comparison", "icon": "$(clear-all)" },
+      { "command": "xsdAtlas.buyPro", "title": "XSD Atlas: Buy Pro" },
+      { "command": "xsdAtlas.enterKey", "title": "XSD Atlas: Enter Licence Key" },
+      { "command": "xsdAtlas.licenceStatus", "title": "XSD Atlas: Show Licence Status" },
+      { "command": "xsdAtlas.removeLicence", "title": "XSD Atlas: Remove Licence From This Machine" },
+      { "command": "xsdAtlas.compareFiles", "title": "XSD Atlas: Compare Schema With Another File (Pro)" },
+      { "command": "xsdAtlas.compareFolders", "title": "XSD Atlas: Compare Two Schema Folders (Pro)" },
+      { "command": "xsdAtlas.compareRevisions", "title": "XSD Atlas: Compare With Git Revision (Pro)" },
+      { "command": "xsdAtlas.exportComparison", "title": "XSD Atlas: Export Comparison Report (Pro)", "icon": "$(export)" },
+      { "command": "xsdAtlas.sampleXmlFull", "title": "XSD Atlas: Create Full Sample XML (Pro)" },
+      { "command": "xsdAtlas.createDocumentation", "title": "XSD Atlas: Create Schema Documentation (Pro)" },
+      { "command": "xsdAtlas.flatten", "title": "XSD Atlas: Flatten Schema (Pro)" },
+      { "command": "xsdAtlas.soapSamples", "title": "XSD Atlas: Create SOAP Envelope Samples (Pro)" },
+      { "command": "xsdAtlas.inventory", "title": "XSD Atlas: Create Workspace Schema Inventory (Pro)" }
+    ],
+    "submenus": [
+      { "id": "xsdAtlas.editorMenu", "label": "XSD Atlas" }
+    ],
+    "menus": {
+      "commandPalette": [
+        { "command": "xsdAtlas.revealRange", "when": "false" },
+        { "command": "xsdAtlas.revealChange", "when": "false" },
+        { "command": "xsdAtlas.refreshOutline", "when": "false" }
+      ],
+      "editor/context": [
+        { "submenu": "xsdAtlas.editorMenu", "when": "resourceExtname == .xsd || resourceExtname == .wsdl", "group": "xsdAtlas" }
+      ],
+      "xsdAtlas.editorMenu": [
+        { "command": "xsdAtlas.copyPath", "group": "1_navigate@1" },
+        { "command": "xsdAtlas.checkFile", "group": "1_navigate@2" },
+        { "command": "xsdAtlas.sampleXml", "group": "2_sample@1" },
+        { "command": "xsdAtlas.sampleXmlFull", "group": "2_sample@2" },
+        { "command": "xsdAtlas.soapSamples", "group": "2_sample@3" },
+        { "command": "xsdAtlas.compareFiles", "group": "3_pro@1" },
+        { "command": "xsdAtlas.compareRevisions", "group": "3_pro@2" },
+        { "command": "xsdAtlas.createDocumentation", "group": "3_pro@3" },
+        { "command": "xsdAtlas.flatten", "group": "3_pro@4" }
+      ],
+      "explorer/context": [
+        { "command": "xsdAtlas.compareFolders", "when": "explorerResourceIsFolder", "group": "xsdAtlas@1" }
+      ],
+      "view/title": [
+        { "command": "xsdAtlas.refreshOutline", "when": "view == xsdAtlas.outline", "group": "navigation" },
+        { "command": "xsdAtlas.exportComparison", "when": "view == xsdAtlas.diff", "group": "navigation@1" },
+        { "command": "xsdAtlas.clearComparison", "when": "view == xsdAtlas.diff", "group": "navigation@2" }
+      ]
+    },
+    "viewsContainers": {
+      "activitybar": [
+        { "id": "xsdAtlas", "title": "XSD Atlas", "icon": "media/activity.svg" }
+      ]
+    },
+    "views": {
+      "xsdAtlas": [
+        { "id": "xsdAtlas.outline", "name": "Schema Outline", "contextualTitle": "XSD Atlas" },
+        { "id": "xsdAtlas.diff", "name": "Schema Comparison", "contextualTitle": "XSD Atlas" }
+      ]
+    },
+    "viewsWelcome": [
+      {
+        "view": "xsdAtlas.outline",
+        "contents": "Open an XSD or WSDL file to see its schemas, types, elements, operations and services here.\n[Open Sample Schema](command:xsdAtlas.openSampleSchema)\n[Open Sample WSDL](command:xsdAtlas.openSampleWsdl)\n[Getting Started Guide](command:xsdAtlas.openWalkthrough)"
+      },
+      {
+        "view": "xsdAtlas.diff",
+        "contents": "Compare two versions of a schema (Pro, included in the free 14-day trial). Every change is listed as breaking, non-breaking or documentation only.\n[Compare With Another File](command:xsdAtlas.compareFiles)\n[Compare With Git Revision](command:xsdAtlas.compareRevisions)\n[Compare Two Folders](command:xsdAtlas.compareFolders)"
+      }
+    ],
+    "walkthroughs": [
+      {
+        "id": "xsdAtlas.gettingStarted",
+        "title": "Get started with XSD Atlas",
+        "description": "Open a sample schema, read its structure, jump between definitions, build a sample XML document and compare two schema versions with the free 14-day Pro trial.",
+        "steps": [
+          {
+            "id": "xsdAtlas.step.openSample",
+            "title": "Open a sample schema",
+            "description": "XSD Atlas reads XML Schema (XSD) and WSDL 1.1 and 2.0 files. Open the short invented samples to follow along, or open one of your own files.\n[Open Sample Schema](command:xsdAtlas.openSampleSchema)\n[Open Sample WSDL](command:xsdAtlas.openSampleWsdl)",
+            "media": { "markdown": "media/walkthrough/open-sample.md" },
+            "completionEvents": ["onCommand:xsdAtlas.openSampleSchema", "onCommand:xsdAtlas.openSampleWsdl"]
+          },
+          {
+            "id": "xsdAtlas.step.outline",
+            "title": "Read the outline and hover a type",
+            "description": "The XSD Atlas view lists imports, elements, types, groups and attributes, or for a WSDL the messages, operations, bindings and services. Hover a type name to see its definition, base types, facets and documentation.\n[Show the Outline](command:workbench.view.extension.xsdAtlas)",
+            "media": { "markdown": "media/walkthrough/outline.md" },
+            "completionEvents": ["onView:xsdAtlas.outline"]
+          },
+          {
+            "id": "xsdAtlas.step.navigate",
+            "title": "Jump to definitions and check problems",
+            "description": "F12 on a type or element reference opens its definition, also across imports and includes; Shift+F12 lists every use. Broken references, duplicate names and invalid facets show up in the Problems view with a stable code.\n[Check Current File](command:xsdAtlas.checkFile)",
+            "media": { "markdown": "media/walkthrough/navigate.md" },
+            "completionEvents": ["onCommand:xsdAtlas.checkFile", "onStepSelected"]
+          },
+          {
+            "id": "xsdAtlas.step.sample",
+            "title": "Create a sample XML document",
+            "description": "Pick a global element and get a minimal document with every required element and values that satisfy the facets.\n[Create Sample XML](command:xsdAtlas.sampleXml)",
+            "media": { "markdown": "media/walkthrough/sample.md" },
+            "completionEvents": ["onCommand:xsdAtlas.sampleXml"]
+          },
+          {
+            "id": "xsdAtlas.step.pro",
+            "title": "Compare two versions (Pro trial)",
+            "description": "Open version 2 of the sample, then compare it with version 1: each change is classified as breaking, non-breaking or documentation. The first Pro command starts a free 14-day trial on this computer; no key, account or network is needed.\n[Open Sample Schema Version 2](command:xsdAtlas.openSampleSchemaV2)\n[Compare Schema With Another File](command:xsdAtlas.compareFiles)\n[Show Licence Status](command:xsdAtlas.licenceStatus)",
+            "media": { "markdown": "media/walkthrough/pro.md" },
+            "completionEvents": ["onCommand:xsdAtlas.compareFiles", "onCommand:xsdAtlas.licenceStatus"]
+          }
+        ]
+      }
+    ],
+    "configuration": {
+      "title": "XSD Atlas",
+      "properties": {
+        "xsdAtlas.maxFileSizeMB": {
+          "type": "number",
+          "default": 10,
+          "minimum": 0.1,
+          "maximum": 32,
+          "order": 1,
+          "markdownDescription": "Largest file, in megabytes, that is analysed automatically for problems, outline, hovers and navigation. Larger files are checked on demand with **XSD Atlas: Check Current File**, up to 32 MB."
+        },
+        "xsdAtlas.maxProblems": {
+          "type": "integer",
+          "default": 500,
+          "minimum": 1,
+          "maximum": 10000,
+          "order": 2,
+          "markdownDescription": "Maximum number of problems shown per file."
+        },
+        "xsdAtlas.validateOnType": {
+          "type": "boolean",
+          "default": true,
+          "order": 3,
+          "markdownDescription": "Check schema files while you type (after a short pause). When off, files are checked when opened and saved. Files above 2 MB are only checked on save."
+        },
+        "xsdAtlas.hover.enabled": {
+          "type": "boolean",
+          "default": true,
+          "order": 4,
+          "markdownDescription": "Show the definition of a type, element, attribute or group when the pointer rests on its name."
+        },
+        "xsdAtlas.workspace.include": {
+          "type": "string",
+          "default": "**/*.{xsd,wsdl}",
+          "order": 5,
+          "markdownDescription": "Glob pattern of the files used for workspace-wide go to definition, find references and the schema inventory."
+        },
+        "xsdAtlas.workspace.exclude": {
+          "type": "string",
+          "default": "**/{node_modules,.git}/**",
+          "order": 6,
+          "markdownDescription": "Glob pattern of files and folders that the workspace-wide features skip."
+        },
+        "xsdAtlas.workspace.maxFiles": {
+          "type": "integer",
+          "default": 2000,
+          "minimum": 1,
+          "maximum": 20000,
+          "order": 7,
+          "markdownDescription": "Largest number of schema files the workspace-wide features read."
+        },
+        "xsdAtlas.sample.repeat": {
+          "type": "integer",
+          "default": 2,
+          "minimum": 1,
+          "maximum": 10,
+          "order": 8,
+          "markdownDescription": "How often **Create Full Sample XML** (Pro) repeats elements that may occur more than once (never more than their maxOccurs)."
+        },
+        "xsdAtlas.sample.seed": {
+          "type": "integer",
+          "default": 1,
+          "minimum": 0,
+          "maximum": 2147483647,
+          "order": 9,
+          "markdownDescription": "Seed for the values of **Create Full Sample XML** and **Create SOAP Envelope Samples** (Pro). The same seed and schema give the same document."
+        },
+        "xsdAtlas.sample.realisticValues": {
+          "type": "boolean",
+          "default": true,
+          "order": 10,
+          "markdownDescription": "In the Pro samples, use values that fit the names of elements and attributes (an e-mail address for `email`, a city for `city`, ...), whenever they also satisfy the facets of the type."
+        },
+        "xsdAtlas.export.neutraliseFormulas": {
+          "type": "boolean",
+          "default": true,
+          "order": 11,
+          "markdownDescription": "In CSV exports (Pro), put an apostrophe before every cell that starts with `=`, `+`, `-`, `@`, a tab or a carriage return, so that a spreadsheet shows it as text instead of running it as a formula. Turn off only when you need the exact values and open the files in a program that does not run formulas."
+        }
+      }
+    }
+  }
+}

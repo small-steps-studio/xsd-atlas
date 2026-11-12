@@ -1,0 +1,19 @@
+node_modules/
+*.vsix
+.vscode-test/
+.env
+*.log
+
+# Working notes, audits and the local test harness stay on this computer.
+SPEC.md
+SPEC-*.md
+*-SPEC.md
+NOTES.md
+*NOTES*.md
+STATUS*
+QA-*.md
+RELEASE-NOTES-*.md
+TODO-BEFORE-PUBLISH.md
+demo/
+test/.tmp/
+test/smoke/

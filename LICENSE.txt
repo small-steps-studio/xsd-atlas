@@ -1,0 +1,176 @@
+XSD Atlas End User Licence Agreement
+
+Version 1, for XSD Atlas 0.1.0 and later.
+Copyright (c) 2026 Small Steps Studio. All rights reserved.
+
+This agreement is between you and Small Steps Studio, the author of XSD Atlas
+("the author"), and covers the XSD Atlas extension for Visual Studio Code
+("the software"), its documentation and its updates. By installing or using
+the software you accept this agreement. If you do not accept it, do not
+install or use the software.
+
+Plain summary (the numbered sections are what counts): the free features may
+be used by anyone without charge; the Pro features are unlocked by the free
+14-day trial or by a paid licence key, which is either a Personal licence for
+one person or a Business licence for one user of an organisation, each on up
+to three computers; keys may not be shared or resold; the software comes
+without warranty; the author's liability is limited to the price you paid.
+
+1. The free features
+
+   a) You may install and use the free features of the software on any number
+      of computers, for personal, educational and commercial purposes, without
+      charge and without a licence key.
+
+   b) The free features never require an account, a key or a network
+      connection.
+
+2. The trial
+
+   a) The Pro features may be used free of charge for a trial period of 14
+      days per computer. The trial starts the first time a Pro feature is run
+      on that computer and is recorded only on that computer.
+
+   b) The trial exists so that you can evaluate the Pro features before you
+      buy. It is not renewed, and working around its end (for example by
+      editing the editor's storage) is not allowed.
+
+3. The Pro features and the paid licence key
+
+   a) After the trial, the Pro features are unlocked with a paid licence key
+      ("the key"). Two kinds of key are sold:
+
+      - A Personal licence is for one individual who pays for it with their
+        own money. It may be used for that person's work, including work for
+        an employer or a client.
+
+      - A Business licence is bought by a company or other organisation for
+        one of its users (employees or contractors working for it). An
+        organisation buys one Business licence per person who uses the Pro
+        features. A Business licence belongs to the organisation, which may
+        move it from one of its users to another.
+
+   b) Each key may be active on up to three computers at the same time, used
+      by the person the key is for.
+
+   c) The key does not expire. It stays valid for the version you bought and
+      for every update of the software that the author publishes as the same
+      product.
+
+   d) You may move a key from one computer to another: run the command
+      "XSD Atlas: Remove Licence From This Machine" on the old computer, then
+      enter the key on the new one. If a computer is lost or broken, contact
+      support (section 12) so that its activation can be released.
+
+4. What you may not do
+
+   a) Copy, redistribute, publish, sell, rent, lend, sublicense or otherwise
+      make the software available to third parties, in its original or a
+      modified form, except as the Visual Studio Marketplace or another store
+      chosen by the author does on the author's behalf.
+
+   b) Share, publish, resell, transfer or give away a key (except moving a
+      Business licence within the organisation that owns it), use one key for
+      more than one person, or use it on more than three computers at the same
+      time.
+
+   c) Remove, disable, bypass or work around the licence check, the trial
+      period or any other limit of the software.
+
+   d) Decompile, disassemble or reverse engineer the software, except to the
+      extent that applicable law expressly allows this despite this clause.
+
+   e) Remove or change copyright, ownership or licence notices.
+
+5. Ownership
+
+   The software is licensed, not sold. The author keeps every right in the
+   software that this agreement does not expressly give to you. Your own files
+   and data, and the documents, reports and samples the software produces from
+   them, remain yours; the software claims no right in them and sends none of
+   them anywhere.
+
+6. Purchases, payment and refunds
+
+   Licence keys are sold by the payment provider Dodo Payments, which acts as
+   the merchant of record. Your purchase contract for the key is with the
+   merchant of record, and its buyer terms and refund policy apply to the
+   payment, to invoices and to refunds. The author does not process payments
+   and never sees your payment details. Prices are shown on the checkout page
+   before you pay, including any taxes that apply to your country.
+
+7. Your files and privacy
+
+   The software reads and processes your files only on your own computer. The
+   only network request it makes is the licence check described in PRIVACY.md,
+   and only after you have entered a key. There is no telemetry.
+
+8. Updates
+
+   The author may publish updates. Updates are covered by this agreement
+   unless they come with their own agreement. The author is not obliged to
+   publish updates or to keep any feature, but will not move a feature that is
+   free in a given version behind the licence key in a later version.
+
+9. Ending the agreement
+
+   This agreement ends if you break it. Then you must stop using the software
+   and delete your copies. The author may deactivate a key that is used in
+   breach of section 3 or 4. You may end the agreement at any time by
+   uninstalling the software; a key that is no longer used can be released
+   with "XSD Atlas: Remove Licence From This Machine".
+
+10. No warranty
+
+   The software is provided "as is" and "as available", without warranty of
+   any kind, express or implied, including the implied warranties of
+   merchantability, fitness for a particular purpose and non-infringement. The
+   checks, comparisons and classifications the software performs are aids:
+   they do not replace testing with your partners' or your own systems, the
+   software does not validate XML documents against a schema, and the author
+   does not promise that it finds every problem or every change or that it is
+   free of errors. Where a jurisdiction does not allow the exclusion of
+   certain warranties, those warranties apply to the minimum extent required.
+
+11. Limit of liability
+
+   To the extent the law allows, the author is not liable for any indirect,
+   incidental, special or consequential loss, or for loss of data, profit,
+   revenue or business, arising from the use of or the inability to use the
+   software. The total liability of the author for all claims about the
+   software together is limited to the price you paid for the licence key, or
+   to zero if you have only used the free features or the trial. Nothing in
+   this agreement limits liability that cannot be limited by law, and nothing
+   in it takes away mandatory consumer rights that you have where you live.
+
+12. Support and contact
+
+   Questions about the software and this agreement, lost keys and activation
+   problems: https://github.com/small-steps-studio/xsd-atlas/issues (public;
+   never post a licence key or confidential data there). Within the software,
+   the command "XSD Atlas: Report A Problem" prepares a report.
+
+13. Governing law
+
+   This agreement is governed by the law of the country in which the author is
+   resident at the time of the purchase, without regard to its rules on
+   conflicts of law, and disputes are brought before the courts competent
+   there. Mandatory consumer protection rules of the country where you live,
+   and any right you have under them to bring a claim at home, remain
+   unaffected.
+
+14. Whole agreement
+
+   This agreement, together with PRIVACY.md and TERMS.md, is the whole
+   agreement about the software. If one clause is found invalid, the others
+   stay in force. A newer version of this agreement may come with an update;
+   the version that ships with the software you use applies.
+
+
+Third-party notice
+
+XSD Atlas contains no bundled third-party components. It is written in plain
+JavaScript and uses only the Node.js runtime and the extension interface that
+Visual Studio Code provides; neither is distributed with the software. The
+names XML Schema, WSDL and SOAP refer to specifications of the World Wide Web
+Consortium and are used only to say which file formats the software reads.
