@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Chameleon include: the included file has no targetNamespace and takes this one. -->
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
+           xmlns="urn:example:clinic:appointment"
+           targetNamespace="urn:example:clinic:appointment"
+           elementFormDefault="qualified">
+  <xs:include schemaLocation="08-chameleon-parts.xsd"/>
+  <xs:element name="appointment">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element name="slot" type="SlotType"/>
+        <xs:element name="room" type="RoomCodeType"/>
+        <xs:element name="reason" type="xs:string" minOccurs="0"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+</xs:schema>

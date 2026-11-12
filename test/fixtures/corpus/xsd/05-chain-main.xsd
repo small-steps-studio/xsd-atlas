@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Include chain: main includes part 1, which includes part 2 (all one namespace). -->
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
+           xmlns:wo="urn:example:workshop:job"
+           targetNamespace="urn:example:workshop:job"
+           elementFormDefault="qualified">
+  <xs:include schemaLocation="05-chain-part1.xsd"/>
+  <xs:element name="repairJob">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element name="jobNumber" type="wo:JobNumberType"/>
+        <xs:element name="bicycle" type="wo:BicycleType"/>
+        <xs:element name="task" type="wo:TaskType" maxOccurs="unbounded"/>
+      </xs:sequence>
+      <xs:attribute name="priority" type="wo:PriorityType" default="normal"/>
+    </xs:complexType>
+  </xs:element>
+</xs:schema>

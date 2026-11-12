@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Identity constraints: key, unique and keyref. -->
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
+           xmlns:ic="urn:example:warehouse:stock"
+           targetNamespace="urn:example:warehouse:stock"
+           elementFormDefault="qualified">
+  <xs:element name="stockReport">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element name="location" maxOccurs="unbounded">
+          <xs:complexType>
+            <xs:attribute name="code" type="xs:token" use="required"/>
+            <xs:attribute name="aisle" type="xs:positiveInteger"/>
+          </xs:complexType>
+        </xs:element>
+        <xs:element name="stockItem" maxOccurs="unbounded">
+          <xs:complexType>
+            <xs:sequence>
+              <xs:element name="sku" type="xs:token"/>
+              <xs:element name="ean" type="xs:token" minOccurs="0"/>
+              <xs:element name="quantity" type="xs:nonNegativeInteger"/>
+            </xs:sequence>
+            <xs:attribute name="location" type="xs:token" use="required"/>
+          </xs:complexType>
+        </xs:element>
+      </xs:sequence>
+    </xs:complexType>
+    <xs:key name="LocationKey">
+      <xs:selector xpath="ic:location"/>
+      <xs:field xpath="@code"/>
+    </xs:key>
+    <xs:unique name="EanUnique">
+      <xs:selector xpath="ic:stockItem"/>
+      <xs:field xpath="ic:ean"/>
+    </xs:unique>
+    <xs:keyref name="StockLocationRef" refer="ic:LocationKey">
+      <xs:selector xpath="ic:stockItem"/>
+      <xs:field xpath="@location"/>
+    </xs:keyref>
+  </xs:element>
+</xs:schema>

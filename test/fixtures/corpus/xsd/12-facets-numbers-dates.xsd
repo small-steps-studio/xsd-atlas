@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Numeric, date and time facets, built-in integer types and durations. -->
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
+           xmlns:nd="urn:example:facets:numbers"
+           targetNamespace="urn:example:facets:numbers"
+           elementFormDefault="qualified">
+  <xs:element name="measurement">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element name="percentage" type="nd:PercentageType"/>
+        <xs:element name="temperatureKelvin" type="nd:KelvinType"/>
+        <xs:element name="price" type="nd:PriceType"/>
+        <xs:element name="smallCount" type="xs:unsignedByte"/>
+        <xs:element name="offset" type="xs:short"/>
+        <xs:element name="debt" type="xs:negativeInteger" minOccurs="0"/>
+        <xs:element name="ratio" type="xs:double"/>
+        <xs:element name="factor" type="nd:FactorType"/>
+        <xs:element name="validFrom" type="nd:ValidDateType"/>
+        <xs:element name="checkedAt" type="xs:time"/>
+        <xs:element name="window" type="nd:WindowType"/>
+        <xs:element name="season" type="xs:gYear"/>
+        <xs:element name="birthday" type="xs:gMonthDay" minOccurs="0"/>
+        <xs:element name="dayOfMonth" type="xs:gDay" minOccurs="0"/>
+        <xs:element name="month" type="xs:gMonth" minOccurs="0"/>
+        <xs:element name="flag" type="xs:boolean"/>
+        <xs:element name="bigNumber" type="xs:unsignedLong"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:simpleType name="PercentageType">
+    <xs:restriction base="xs:decimal">
+      <xs:minInclusive value="0"/>
+      <xs:maxInclusive value="100"/>
+      <xs:fractionDigits value="2"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="KelvinType">
+    <xs:restriction base="xs:float">
+      <xs:minExclusive value="0"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="PriceType">
+    <xs:restriction base="xs:decimal">
+      <xs:minExclusive value="0.00"/>
+      <xs:maxExclusive value="1000000"/>
+      <xs:totalDigits value="9"/>
+      <xs:fractionDigits value="2"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="FactorType">
+    <xs:restriction base="xs:integer">
+      <xs:minInclusive value="-5"/>
+      <xs:maxInclusive value="5"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="ValidDateType">
+    <xs:restriction base="xs:date">
+      <xs:minInclusive value="2020-01-01"/>
+      <xs:maxExclusive value="2100-01-01"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="WindowType">
+    <xs:restriction base="xs:duration">
+      <xs:minInclusive value="PT1H"/>
+      <xs:maxInclusive value="P7D"/>
+    </xs:restriction>
+  </xs:simpleType>
+</xs:schema>

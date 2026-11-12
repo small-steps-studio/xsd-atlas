@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
+           xmlns:wo="urn:example:workshop:job"
+           targetNamespace="urn:example:workshop:job"
+           elementFormDefault="qualified">
+  <xs:include schemaLocation="05-chain-part2.xsd"/>
+  <xs:complexType name="BicycleType">
+    <xs:sequence>
+      <xs:element name="frameNumber" type="xs:token"/>
+      <xs:element name="make" type="xs:string"/>
+      <xs:element name="wheelSize" type="wo:WheelSizeType" minOccurs="0"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="TaskType">
+    <xs:sequence>
+      <xs:element name="description" type="xs:string"/>
+      <xs:element name="minutes" type="xs:positiveInteger"/>
+      <xs:element name="part" type="wo:PartType" minOccurs="0" maxOccurs="unbounded"/>
+    </xs:sequence>
+  </xs:complexType>
+</xs:schema>

@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Simple content: extension of a built-in, extension of a named simple type, restriction of a complex type with simple content. -->
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
+           xmlns:sc="urn:example:simple:content"
+           targetNamespace="urn:example:simple:content"
+           elementFormDefault="qualified">
+  <xs:element name="priceList">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element name="price" type="sc:PriceType" maxOccurs="unbounded"/>
+        <xs:element name="smallPrice" type="sc:SmallPriceType" minOccurs="0"/>
+        <xs:element name="label" type="sc:LabelType"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:simpleType name="MoneyType">
+    <xs:restriction base="xs:decimal">
+      <xs:minInclusive value="0"/>
+      <xs:fractionDigits value="2"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:complexType name="PriceType">
+    <xs:simpleContent>
+      <xs:extension base="sc:MoneyType">
+        <xs:attribute name="currency" type="xs:string" use="required"/>
+        <xs:attribute name="vatIncluded" type="xs:boolean" default="true"/>
+      </xs:extension>
+    </xs:simpleContent>
+  </xs:complexType>
+  <xs:complexType name="SmallPriceType">
+    <xs:simpleContent>
+      <xs:restriction base="sc:PriceType">
+        <xs:maxInclusive value="10"/>
+      </xs:restriction>
+    </xs:simpleContent>
+  </xs:complexType>
+  <xs:complexType name="LabelType">
+    <xs:simpleContent>
+      <xs:extension base="xs:string">
+        <xs:attribute name="lang" type="xs:language" default="en"/>
+      </xs:extension>
+    </xs:simpleContent>
+  </xs:complexType>
+</xs:schema>

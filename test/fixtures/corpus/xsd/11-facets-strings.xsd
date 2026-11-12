@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- String facets: length, patterns at two levels, enumerations, white space. -->
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
+           xmlns:st="urn:example:facets:strings"
+           targetNamespace="urn:example:facets:strings"
+           elementFormDefault="qualified">
+  <xs:element name="profile">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element name="handle" type="st:HandleType"/>
+        <xs:element name="shortHandle" type="st:ShortHandleType"/>
+        <xs:element name="postcode" type="st:PostcodeType"/>
+        <xs:element name="colour" type="st:ColourType"/>
+        <xs:element name="motto" type="st:MottoType" minOccurs="0"/>
+        <xs:element name="initials" type="st:InitialsType"/>
+        <xs:element name="tag" type="st:TagType" maxOccurs="5"/>
+        <xs:element name="vatNumber" type="st:VatNumberType" minOccurs="0"/>
+        <xs:element name="checksum" type="xs:hexBinary"/>
+        <xs:element name="avatar" type="st:SmallBinaryType" minOccurs="0"/>
+        <xs:element name="homepage" type="xs:anyURI" minOccurs="0"/>
+        <xs:element name="language" type="xs:language"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:simpleType name="HandleType">
+    <xs:restriction base="xs:token">
+      <xs:minLength value="3"/>
+      <xs:maxLength value="20"/>
+      <xs:pattern value="[a-z][a-z0-9_]*"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="ShortHandleType">
+    <xs:restriction base="st:HandleType">
+      <xs:maxLength value="8"/>
+      <xs:pattern value="[a-m].*"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="PostcodeType">
+    <xs:restriction base="xs:string">
+      <xs:pattern value="[0-9]{5}"/>
+      <xs:pattern value="[A-Z]{1,2}[0-9][0-9A-Z]? [0-9][A-Z]{2}"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="ColourType">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="sage"/>
+      <xs:enumeration value="ochre"/>
+      <xs:enumeration value="slate blue"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="MottoType">
+    <xs:restriction base="xs:string">
+      <xs:whiteSpace value="collapse"/>
+      <xs:maxLength value="80"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="InitialsType">
+    <xs:restriction base="xs:string">
+      <xs:length value="2"/>
+      <xs:pattern value="\p{Lu}{2}"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="TagType">
+    <xs:restriction base="xs:NMTOKEN">
+      <xs:pattern value="[\c-[:]]+"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="VatNumberType">
+    <xs:restriction base="xs:string">
+      <xs:pattern value="[A-Z]{2}[0-9A-Z+*.]{2,12}"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="SmallBinaryType">
+    <xs:restriction base="xs:base64Binary">
+      <xs:maxLength value="64"/>
+    </xs:restriction>
+  </xs:simpleType>
+</xs:schema>

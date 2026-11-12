@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Complex content extension over three levels with attributes added at each level. -->
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
+           xmlns:ce="urn:example:vehicles:fleet"
+           targetNamespace="urn:example:vehicles:fleet"
+           elementFormDefault="qualified">
+  <xs:element name="fleet">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element name="van" type="ce:VanType" maxOccurs="unbounded"/>
+        <xs:element name="bike" type="ce:CargoBikeType" minOccurs="0" maxOccurs="unbounded"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:complexType name="AssetType">
+    <xs:sequence>
+      <xs:element name="assetTag" type="xs:token"/>
+      <xs:element name="acquired" type="xs:date"/>
+    </xs:sequence>
+    <xs:attribute name="active" type="xs:boolean" default="true"/>
+  </xs:complexType>
+  <xs:complexType name="VehicleType">
+    <xs:complexContent>
+      <xs:extension base="ce:AssetType">
+        <xs:sequence>
+          <xs:element name="registration" type="xs:token"/>
+          <xs:element name="seats" type="xs:positiveInteger"/>
+        </xs:sequence>
+        <xs:attribute name="fuel" type="xs:token" use="required"/>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:complexType name="VanType">
+    <xs:complexContent>
+      <xs:extension base="ce:VehicleType">
+        <xs:sequence>
+          <xs:element name="payloadKg" type="xs:positiveInteger"/>
+          <xs:element name="refrigerated" type="xs:boolean" minOccurs="0"/>
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:complexType name="CargoBikeType">
+    <xs:complexContent>
+      <xs:extension base="ce:AssetType">
+        <xs:sequence>
+          <xs:element name="boxLitres" type="xs:positiveInteger"/>
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+</xs:schema>

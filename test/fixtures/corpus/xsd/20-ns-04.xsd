@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:n4="urn:example:multi:n4" targetNamespace="urn:example:multi:n4" elementFormDefault="qualified">
+  <xs:complexType name="CarHireType">
+    <xs:sequence>
+      <xs:element name="pickUp" type="xs:dateTime"/>
+      <xs:element name="dropOff" type="xs:dateTime"/>
+      <xs:element name="carClass" type="xs:token"/>
+    </xs:sequence>
+  </xs:complexType>
+</xs:schema>

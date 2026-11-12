@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- A product catalogue feed with a default namespace, attribute-heavy items and a version list. -->
+<schema xmlns="http://www.w3.org/2001/XMLSchema"
+        xmlns:cf="urn:example:catalogue:feed"
+        targetNamespace="urn:example:catalogue:feed"
+        elementFormDefault="qualified" attributeFormDefault="unqualified">
+  <element name="catalogue">
+    <complexType>
+      <sequence>
+        <element name="product" type="cf:ProductType" maxOccurs="unbounded"/>
+      </sequence>
+      <attribute name="supplier" type="token" use="required"/>
+      <attribute name="issuedOn" type="date"/>
+    </complexType>
+  </element>
+  <complexType name="ProductType">
+    <sequence>
+      <element name="title" type="string"/>
+      <element name="variant" minOccurs="0" maxOccurs="unbounded">
+        <complexType>
+          <attribute name="size" type="cf:SizeType" use="required"/>
+          <attribute name="colour" type="token"/>
+          <attribute name="stock" type="nonNegativeInteger" default="0"/>
+        </complexType>
+      </element>
+    </sequence>
+    <attribute name="sku" type="cf:SkuType" use="required"/>
+    <attribute name="price" type="decimal" use="required"/>
+    <attribute name="tags" type="NMTOKENS"/>
+    <attribute name="discontinued" type="boolean" default="false"/>
+  </complexType>
+  <simpleType name="SkuType">
+    <restriction base="string">
+      <pattern value="[A-Z]{3}-[0-9]{4}(-[A-Z])?"/>
+    </restriction>
+  </simpleType>
+  <simpleType name="SizeType">
+    <restriction base="token">
+      <enumeration value="XS"/>
+      <enumeration value="S"/>
+      <enumeration value="M"/>
+      <enumeration value="L"/>
+      <enumeration value="XL"/>
+    </restriction>
+  </simpleType>
+</schema>

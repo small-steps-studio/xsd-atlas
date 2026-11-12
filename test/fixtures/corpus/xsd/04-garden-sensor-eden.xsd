@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Garden of Eden style: global elements and global named types. -->
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
+           xmlns:gs="urn:example:greenhouse:sensors"
+           targetNamespace="urn:example:greenhouse:sensors"
+           elementFormDefault="qualified">
+  <xs:element name="readingBatch" type="gs:ReadingBatchType"/>
+  <xs:element name="reading" type="gs:ReadingType"/>
+  <xs:element name="sensorId" type="gs:SensorIdType"/>
+  <xs:element name="takenAt" type="xs:dateTime"/>
+  <xs:element name="temperature" type="gs:CelsiusType"/>
+  <xs:element name="humidity" type="gs:PercentType"/>
+  <xs:element name="soilMoisture" type="gs:PercentType"/>
+  <xs:complexType name="ReadingBatchType">
+    <xs:sequence>
+      <xs:element ref="gs:reading" maxOccurs="unbounded"/>
+    </xs:sequence>
+    <xs:attribute name="greenhouse" type="xs:NCName" use="required"/>
+  </xs:complexType>
+  <xs:complexType name="ReadingType">
+    <xs:sequence>
+      <xs:element ref="gs:sensorId"/>
+      <xs:element ref="gs:takenAt"/>
+      <xs:choice>
+        <xs:element ref="gs:temperature"/>
+        <xs:element ref="gs:humidity"/>
+        <xs:element ref="gs:soilMoisture"/>
+      </xs:choice>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:simpleType name="SensorIdType">
+    <xs:restriction base="xs:string">
+      <xs:pattern value="S[0-9]{3}-[a-z]{2}"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="CelsiusType">
+    <xs:restriction base="xs:decimal">
+      <xs:minInclusive value="-40"/>
+      <xs:maxInclusive value="85"/>
+      <xs:fractionDigits value="1"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="PercentType">
+    <xs:restriction base="xs:decimal">
+      <xs:minInclusive value="0"/>
+      <xs:maxInclusive value="100"/>
+    </xs:restriction>
+  </xs:simpleType>
+</xs:schema>

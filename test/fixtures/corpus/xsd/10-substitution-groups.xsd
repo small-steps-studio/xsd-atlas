@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Substitution groups with an abstract head element and an abstract type. -->
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
+           xmlns:pm="urn:example:payments:method"
+           targetNamespace="urn:example:payments:method"
+           elementFormDefault="qualified">
+  <xs:element name="checkout">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element name="basketTotal" type="xs:decimal"/>
+        <xs:element ref="pm:paymentMethod" maxOccurs="2"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="paymentMethod" type="pm:PaymentMethodType" abstract="true"/>
+  <xs:complexType name="PaymentMethodType" abstract="true">
+    <xs:sequence>
+      <xs:element name="amount" type="xs:decimal"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="card" substitutionGroup="pm:paymentMethod">
+    <xs:complexType>
+      <xs:complexContent>
+        <xs:extension base="pm:PaymentMethodType">
+          <xs:sequence>
+            <xs:element name="lastFour">
+              <xs:simpleType>
+                <xs:restriction base="xs:string">
+                  <xs:pattern value="[0-9]{4}"/>
+                </xs:restriction>
+              </xs:simpleType>
+            </xs:element>
+            <xs:element name="expiry" type="xs:gYearMonth"/>
+          </xs:sequence>
+        </xs:extension>
+      </xs:complexContent>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="voucher" substitutionGroup="pm:paymentMethod">
+    <xs:complexType>
+      <xs:complexContent>
+        <xs:extension base="pm:PaymentMethodType">
+          <xs:sequence>
+            <xs:element name="code" type="xs:token"/>
+          </xs:sequence>
+        </xs:extension>
+      </xs:complexContent>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="giftCard" substitutionGroup="pm:voucher"/>
+</xs:schema>

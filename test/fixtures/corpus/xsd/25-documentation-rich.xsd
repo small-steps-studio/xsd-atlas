@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Annotations on every level, several documentation paragraphs, appinfo with foreign markup. -->
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
+           xmlns:dr="urn:example:docs:timesheet"
+           xmlns:meta="urn:example:docs:meta"
+           targetNamespace="urn:example:docs:timesheet"
+           elementFormDefault="qualified" version="5.2.0">
+  <xs:annotation>
+    <xs:documentation xml:lang="en">Timesheets submitted weekly by contractors.
+
+Each timesheet covers exactly one calendar week.</xs:documentation>
+    <xs:appinfo><meta:owner>Integration team</meta:owner></xs:appinfo>
+  </xs:annotation>
+  <xs:element name="timesheet" type="dr:TimesheetType">
+    <xs:annotation>
+      <xs:documentation>Root element. One per contractor and week.</xs:documentation>
+    </xs:annotation>
+  </xs:element>
+  <xs:complexType name="TimesheetType">
+    <xs:annotation>
+      <xs:documentation>The hours worked per day &amp; per project, with &lt;approval&gt; data.</xs:documentation>
+    </xs:annotation>
+    <xs:sequence>
+      <xs:element name="contractor" type="xs:token">
+        <xs:annotation><xs:documentation>Contractor reference from the vendor register.</xs:documentation></xs:annotation>
+      </xs:element>
+      <xs:element name="weekStarting" type="xs:date">
+        <xs:annotation><xs:documentation>The Monday of the week.</xs:documentation></xs:annotation>
+      </xs:element>
+      <xs:element name="entry" type="dr:EntryType" maxOccurs="7">
+        <xs:annotation><xs:documentation><![CDATA[One entry per day; days without work are left out.]]></xs:documentation></xs:annotation>
+      </xs:element>
+    </xs:sequence>
+    <xs:attribute name="status" type="dr:StatusType" default="draft">
+      <xs:annotation><xs:documentation>Workflow state of the timesheet.</xs:documentation></xs:annotation>
+    </xs:attribute>
+  </xs:complexType>
+  <xs:complexType name="EntryType">
+    <xs:sequence>
+      <xs:element name="day" type="xs:date"/>
+      <xs:element name="project" type="xs:token"/>
+      <xs:element name="hours">
+        <xs:annotation><xs:documentation>Hours in quarter steps, at most 12 a day.</xs:documentation></xs:annotation>
+        <xs:simpleType>
+          <xs:restriction base="xs:decimal">
+            <xs:minInclusive value="0.25"/>
+            <xs:maxInclusive value="12"/>
+            <xs:pattern value="[0-9]+(\.(0|00|25|5|50|75))?"/>
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:element>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:simpleType name="StatusType">
+    <xs:annotation><xs:documentation>draft, submitted or approved.</xs:documentation></xs:annotation>
+    <xs:restriction base="xs:token">
+      <xs:enumeration value="draft"><xs:annotation><xs:documentation>Still being edited.</xs:documentation></xs:annotation></xs:enumeration>
+      <xs:enumeration value="submitted"/>
+      <xs:enumeration value="approved"/>
+    </xs:restriction>
+  </xs:simpleType>
+</xs:schema>

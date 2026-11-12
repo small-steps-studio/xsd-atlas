@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Circular imports: a imports b, b imports a. Each uses a type of the other. -->
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
+           xmlns:a="urn:example:cycle:a"
+           xmlns:b="urn:example:cycle:b"
+           targetNamespace="urn:example:cycle:a"
+           elementFormDefault="qualified">
+  <xs:import namespace="urn:example:cycle:b" schemaLocation="07-cycle-b.xsd"/>
+  <xs:element name="project" type="a:ProjectType"/>
+  <xs:complexType name="ProjectType">
+    <xs:sequence>
+      <xs:element name="title" type="xs:string"/>
+      <xs:element name="milestone" type="b:MilestoneType" maxOccurs="unbounded"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="OwnerType">
+    <xs:sequence>
+      <xs:element name="initials" type="xs:token"/>
+    </xs:sequence>
+  </xs:complexType>
+</xs:schema>

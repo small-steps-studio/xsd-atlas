@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- A B2B invoice message (invented structure), venetian blind with header, lines and totals. -->
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
+           xmlns:inv="http://example.com/schemas/invoice/2"
+           targetNamespace="http://example.com/schemas/invoice/2"
+           elementFormDefault="qualified" version="2.3">
+  <xs:element name="Invoice" type="inv:InvoiceType"/>
+  <xs:complexType name="InvoiceType">
+    <xs:sequence>
+      <xs:element name="Header" type="inv:HeaderType"/>
+      <xs:element name="Line" type="inv:LineType" maxOccurs="unbounded"/>
+      <xs:element name="Totals" type="inv:TotalsType"/>
+    </xs:sequence>
+    <xs:attribute name="documentVersion" type="xs:token" fixed="2.3"/>
+  </xs:complexType>
+  <xs:complexType name="HeaderType">
+    <xs:sequence>
+      <xs:element name="InvoiceNumber" type="inv:DocumentNumberType"/>
+      <xs:element name="IssueDate" type="xs:date"/>
+      <xs:element name="DueDate" type="xs:date" minOccurs="0"/>
+      <xs:element name="Seller" type="inv:PartyRefType"/>
+      <xs:element name="Buyer" type="inv:PartyRefType"/>
+      <xs:element name="OrderReference" type="inv:DocumentNumberType" minOccurs="0" maxOccurs="5"/>
+      <xs:element name="Currency" type="inv:CurrencyType"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="PartyRefType">
+    <xs:sequence>
+      <xs:element name="Name" type="xs:string"/>
+      <xs:element name="TaxId" type="xs:token" minOccurs="0"/>
+    </xs:sequence>
+    <xs:attribute name="id" type="xs:token" use="required"/>
+  </xs:complexType>
+  <xs:complexType name="LineType">
+    <xs:sequence>
+      <xs:element name="ItemCode" type="xs:token"/>
+      <xs:element name="Description" type="xs:string" minOccurs="0"/>
+      <xs:element name="Quantity" type="inv:QuantityType"/>
+      <xs:element name="UnitPrice" type="inv:AmountType"/>
+      <xs:element name="TaxRate" type="inv:RateType"/>
+      <xs:element name="LineAmount" type="inv:AmountType"/>
+    </xs:sequence>
+    <xs:attribute name="lineNo" type="xs:positiveInteger" use="required"/>
+  </xs:complexType>
+  <xs:complexType name="TotalsType">
+    <xs:sequence>
+      <xs:element name="NetAmount" type="inv:AmountType"/>
+      <xs:element name="TaxAmount" type="inv:AmountType"/>
+      <xs:element name="GrossAmount" type="inv:AmountType"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="QuantityType">
+    <xs:simpleContent>
+      <xs:extension base="xs:decimal">
+        <xs:attribute name="unit" type="inv:UnitType" use="required"/>
+      </xs:extension>
+    </xs:simpleContent>
+  </xs:complexType>
+  <xs:simpleType name="DocumentNumberType">
+    <xs:restriction base="xs:token">
+      <xs:minLength value="1"/>
+      <xs:maxLength value="35"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="CurrencyType">
+    <xs:restriction base="xs:token">
+      <xs:pattern value="[A-Z]{3}"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="AmountType">
+    <xs:restriction base="xs:decimal">
+      <xs:totalDigits value="15"/>
+      <xs:fractionDigits value="2"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="RateType">
+    <xs:restriction base="xs:decimal">
+      <xs:minInclusive value="0"/>
+      <xs:maxInclusive value="100"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="UnitType">
+    <xs:restriction base="xs:token">
+      <xs:enumeration value="EA"/>
+      <xs:enumeration value="KG"/>
+      <xs:enumeration value="LTR"/>
+      <xs:enumeration value="HUR"/>
+    </xs:restriction>
+  </xs:simpleType>
+</xs:schema>

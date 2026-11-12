@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Redefine: extends a type of the base schema in place and narrows another. -->
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
+           xmlns:rd="urn:example:recipe:card"
+           targetNamespace="urn:example:recipe:card"
+           elementFormDefault="qualified">
+  <xs:redefine schemaLocation="09-redefine-base.xsd">
+    <xs:complexType name="IngredientType">
+      <xs:complexContent>
+        <xs:extension base="rd:IngredientType">
+          <xs:sequence>
+            <xs:element name="unit" type="xs:token" minOccurs="0"/>
+          </xs:sequence>
+        </xs:extension>
+      </xs:complexContent>
+    </xs:complexType>
+    <xs:simpleType name="ServingsType">
+      <xs:restriction base="rd:ServingsType">
+        <xs:maxInclusive value="12"/>
+      </xs:restriction>
+    </xs:simpleType>
+  </xs:redefine>
+  <xs:element name="recipe">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element name="title" type="xs:string"/>
+        <xs:element name="servings" type="rd:ServingsType"/>
+        <xs:element name="ingredient" type="rd:IngredientType" maxOccurs="unbounded"/>
+        <xs:element name="step" type="xs:string" maxOccurs="unbounded"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+</xs:schema>

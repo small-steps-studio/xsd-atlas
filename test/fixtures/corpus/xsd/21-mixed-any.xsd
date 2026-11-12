@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Mixed content, wildcards (any, anyAttribute) and an extension point at the end of a sequence. -->
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
+           xmlns:mx="urn:example:mixed:article"
+           targetNamespace="urn:example:mixed:article"
+           elementFormDefault="qualified">
+  <xs:element name="article">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element name="headline" type="xs:string"/>
+        <xs:element name="paragraph" type="mx:ParagraphType" maxOccurs="unbounded"/>
+        <xs:element name="extensions" minOccurs="0">
+          <xs:complexType>
+            <xs:sequence>
+              <xs:any namespace="##other" processContents="lax" minOccurs="0" maxOccurs="unbounded"/>
+            </xs:sequence>
+          </xs:complexType>
+        </xs:element>
+      </xs:sequence>
+      <xs:anyAttribute namespace="##other" processContents="skip"/>
+    </xs:complexType>
+  </xs:element>
+  <xs:complexType name="ParagraphType" mixed="true">
+    <xs:choice minOccurs="0" maxOccurs="unbounded">
+      <xs:element name="emphasis" type="xs:string"/>
+      <xs:element name="link">
+        <xs:complexType>
+          <xs:simpleContent>
+            <xs:extension base="xs:string">
+              <xs:attribute name="href" type="xs:anyURI" use="required"/>
+            </xs:extension>
+          </xs:simpleContent>
+        </xs:complexType>
+      </xs:element>
+    </xs:choice>
+  </xs:complexType>
+</xs:schema>

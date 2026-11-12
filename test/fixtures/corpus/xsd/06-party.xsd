@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
+           xmlns:pty="urn:example:logistics:party:2"
+           xmlns:cmn="urn:example:logistics:common:1"
+           targetNamespace="urn:example:logistics:party:2"
+           elementFormDefault="qualified">
+  <xs:import namespace="urn:example:logistics:common:1" schemaLocation="06-common.xsd"/>
+  <xs:complexType name="PartyType">
+    <xs:sequence>
+      <xs:element name="partyId" type="cmn:IdentifierType"/>
+      <xs:element name="name" type="xs:string"/>
+      <xs:element name="address" type="pty:AddressType"/>
+      <xs:element name="contact" type="pty:ContactType" minOccurs="0" maxOccurs="3"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="AddressType">
+    <xs:sequence>
+      <xs:element name="street" type="xs:string" maxOccurs="2"/>
+      <xs:element name="postalCode" type="xs:token"/>
+      <xs:element name="city" type="xs:string"/>
+      <xs:element name="country" type="cmn:CountryCodeType"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="ContactType">
+    <xs:sequence>
+      <xs:element name="person" type="xs:string"/>
+      <xs:choice>
+        <xs:element name="phone" type="xs:string"/>
+        <xs:element name="email" type="xs:string"/>
+      </xs:choice>
+    </xs:sequence>
+  </xs:complexType>
+</xs:schema>

@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Venetian blind style: one global element, named global types, local elements. -->
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
+           xmlns:ft="http://example.com/ns/ferry/ticket"
+           targetNamespace="http://example.com/ns/ferry/ticket"
+           elementFormDefault="unqualified" attributeFormDefault="unqualified" version="2.0">
+  <xs:element name="ticket" type="ft:TicketType"/>
+  <xs:complexType name="TicketType">
+    <xs:annotation><xs:documentation>A single crossing on a passenger ferry.</xs:documentation></xs:annotation>
+    <xs:sequence>
+      <xs:element name="ticketNumber" type="ft:TicketNumberType"/>
+      <xs:element name="route" type="ft:RouteType"/>
+      <xs:element name="passenger" type="ft:PassengerType" maxOccurs="9"/>
+      <xs:element name="vehicle" type="ft:VehicleType" minOccurs="0"/>
+      <xs:element name="fare" type="ft:AmountType"/>
+    </xs:sequence>
+    <xs:attribute name="issued" type="xs:dateTime" use="required"/>
+  </xs:complexType>
+  <xs:simpleType name="TicketNumberType">
+    <xs:restriction base="xs:string">
+      <xs:pattern value="[A-Z]{2}[0-9]{8}"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:complexType name="RouteType">
+    <xs:sequence>
+      <xs:element name="from" type="ft:PortCodeType"/>
+      <xs:element name="to" type="ft:PortCodeType"/>
+      <xs:element name="departure" type="xs:dateTime"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:simpleType name="PortCodeType">
+    <xs:restriction base="xs:token">
+      <xs:length value="5"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:complexType name="PassengerType">
+    <xs:sequence>
+      <xs:element name="givenName" type="xs:string"/>
+      <xs:element name="familyName" type="xs:string"/>
+      <xs:element name="category" type="ft:CategoryType" default="adult"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:simpleType name="CategoryType">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="adult"/>
+      <xs:enumeration value="child"/>
+      <xs:enumeration value="senior"/>
+      <xs:enumeration value="infant"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:complexType name="VehicleType">
+    <xs:sequence>
+      <xs:element name="registration" type="xs:token"/>
+      <xs:element name="lengthMetres">
+        <xs:simpleType>
+          <xs:restriction base="xs:decimal">
+            <xs:minExclusive value="0"/>
+            <xs:maxInclusive value="18.75"/>
+            <xs:fractionDigits value="2"/>
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:element>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="AmountType">
+    <xs:simpleContent>
+      <xs:extension base="xs:decimal">
+        <xs:attribute name="currency" type="xs:string" use="required"/>
+      </xs:extension>
+    </xs:simpleContent>
+  </xs:complexType>
+</xs:schema>

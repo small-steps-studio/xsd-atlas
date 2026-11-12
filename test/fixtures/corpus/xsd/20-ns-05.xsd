@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:n5="urn:example:multi:n5" targetNamespace="urn:example:multi:n5" elementFormDefault="qualified">
+  <xs:complexType name="InsuranceType">
+    <xs:sequence>
+      <xs:element name="policy" type="xs:token"/>
+      <xs:element name="coverUntil" type="xs:date"/>
+    </xs:sequence>
+  </xs:complexType>
+</xs:schema>

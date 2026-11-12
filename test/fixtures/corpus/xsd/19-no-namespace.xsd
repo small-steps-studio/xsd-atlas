@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- A schema without targetNamespace (documents use no namespace). -->
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema">
+  <xs:element name="meterReading">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element name="meter" type="MeterType"/>
+        <xs:element name="value" type="xs:decimal"/>
+        <xs:element name="readOn" type="xs:date"/>
+        <xs:element name="estimated" type="xs:boolean" default="false" minOccurs="0"/>
+      </xs:sequence>
+      <xs:attribute name="source" type="SourceType" use="required"/>
+    </xs:complexType>
+  </xs:element>
+  <xs:complexType name="MeterType">
+    <xs:sequence>
+      <xs:element name="serial" type="xs:token"/>
+      <xs:element name="kind" type="SourceType"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:simpleType name="SourceType">
+    <xs:restriction base="xs:token">
+      <xs:enumeration value="electricity"/>
+      <xs:enumeration value="gas"/>
+      <xs:enumeration value="water"/>
+    </xs:restriction>
+  </xs:simpleType>
+</xs:schema>

@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Named groups and attribute groups, nested and reused. -->
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
+           xmlns:gr="urn:example:groups:hr"
+           targetNamespace="urn:example:groups:hr"
+           elementFormDefault="qualified">
+  <xs:group name="PersonNameGroup">
+    <xs:sequence>
+      <xs:element name="given" type="xs:string"/>
+      <xs:element name="middle" type="xs:string" minOccurs="0"/>
+      <xs:element name="family" type="xs:string"/>
+    </xs:sequence>
+  </xs:group>
+  <xs:group name="ContactGroup">
+    <xs:choice>
+      <xs:element name="workPhone" type="xs:string"/>
+      <xs:element name="workEmail" type="xs:string"/>
+    </xs:choice>
+  </xs:group>
+  <xs:group name="EmployeeCoreGroup">
+    <xs:sequence>
+      <xs:group ref="gr:PersonNameGroup"/>
+      <xs:element name="startDate" type="xs:date"/>
+      <xs:group ref="gr:ContactGroup" maxOccurs="2"/>
+    </xs:sequence>
+  </xs:group>
+  <xs:attributeGroup name="AuditAttributes">
+    <xs:attribute name="createdBy" type="xs:token"/>
+    <xs:attribute name="createdAt" type="xs:dateTime"/>
+  </xs:attributeGroup>
+  <xs:attributeGroup name="RecordAttributes">
+    <xs:attribute name="recordId" type="xs:ID" use="required"/>
+    <xs:attributeGroup ref="gr:AuditAttributes"/>
+  </xs:attributeGroup>
+  <xs:element name="staffList">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element name="employee" maxOccurs="unbounded">
+          <xs:complexType>
+            <xs:sequence>
+              <xs:group ref="gr:EmployeeCoreGroup"/>
+              <xs:element name="team" type="xs:token" minOccurs="0"/>
+            </xs:sequence>
+            <xs:attributeGroup ref="gr:RecordAttributes"/>
+          </xs:complexType>
+        </xs:element>
+      </xs:sequence>
+      <xs:attributeGroup ref="gr:AuditAttributes"/>
+    </xs:complexType>
+  </xs:element>
+</xs:schema>

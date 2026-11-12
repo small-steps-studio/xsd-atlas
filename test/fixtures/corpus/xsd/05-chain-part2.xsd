@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
+           xmlns:wo="urn:example:workshop:job"
+           targetNamespace="urn:example:workshop:job"
+           elementFormDefault="qualified">
+  <xs:simpleType name="JobNumberType">
+    <xs:restriction base="xs:string">
+      <xs:pattern value="J[0-9]{5}"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="PriorityType">
+    <xs:restriction base="xs:token">
+      <xs:enumeration value="low"/>
+      <xs:enumeration value="normal"/>
+      <xs:enumeration value="urgent"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="WheelSizeType">
+    <xs:restriction base="xs:token">
+      <xs:enumeration value="20in"/>
+      <xs:enumeration value="26in"/>
+      <xs:enumeration value="700c"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:complexType name="PartType">
+    <xs:simpleContent>
+      <xs:extension base="xs:string">
+        <xs:attribute name="sku" type="xs:token" use="required"/>
+        <xs:attribute name="count" type="xs:positiveInteger" default="1"/>
+      </xs:extension>
+    </xs:simpleContent>
+  </xs:complexType>
+</xs:schema>

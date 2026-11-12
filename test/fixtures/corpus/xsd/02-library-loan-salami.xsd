@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Salami slice style: every element is global and is used by reference. -->
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
+           xmlns="urn:example:library:loan"
+           targetNamespace="urn:example:library:loan"
+           elementFormDefault="qualified">
+  <xs:element name="loan">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element ref="loanId"/>
+        <xs:element ref="member"/>
+        <xs:element ref="item" maxOccurs="10"/>
+        <xs:element ref="dueDate"/>
+        <xs:element ref="renewals" minOccurs="0"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="loanId" type="xs:ID"/>
+  <xs:element name="member">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element ref="cardNumber"/>
+        <xs:element ref="displayName"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="cardNumber">
+    <xs:simpleType>
+      <xs:restriction base="xs:string">
+        <xs:pattern value="\d{4}-\d{4}-\d{2}"/>
+      </xs:restriction>
+    </xs:simpleType>
+  </xs:element>
+  <xs:element name="displayName" type="xs:normalizedString"/>
+  <xs:element name="item">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element ref="shelfMark"/>
+        <xs:element ref="title"/>
+        <xs:element ref="format" minOccurs="0"/>
+      </xs:sequence>
+      <xs:attribute name="barcode" type="xs:string" use="required"/>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="shelfMark" type="xs:token"/>
+  <xs:element name="title" type="xs:string"/>
+  <xs:element name="format">
+    <xs:simpleType>
+      <xs:restriction base="xs:token">
+        <xs:enumeration value="book"/>
+        <xs:enumeration value="audio"/>
+        <xs:enumeration value="map"/>
+        <xs:enumeration value="score"/>
+      </xs:restriction>
+    </xs:simpleType>
+  </xs:element>
+  <xs:element name="dueDate" type="xs:date"/>
+  <xs:element name="renewals">
+    <xs:simpleType>
+      <xs:restriction base="xs:nonNegativeInteger">
+        <xs:maxInclusive value="3"/>
+      </xs:restriction>
+    </xs:simpleType>
+  </xs:element>
+</xs:schema>

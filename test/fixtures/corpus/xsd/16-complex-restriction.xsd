@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Complex content restriction: fewer occurrences, a prohibited attribute, a fixed value. -->
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
+           xmlns:cr="urn:example:events:booking"
+           targetNamespace="urn:example:events:booking"
+           elementFormDefault="qualified">
+  <xs:element name="booking" type="cr:SingleSeatBookingType"/>
+  <xs:element name="groupBooking" type="cr:BookingType"/>
+  <xs:complexType name="BookingType">
+    <xs:sequence>
+      <xs:element name="event" type="xs:string"/>
+      <xs:element name="seat" type="xs:token" maxOccurs="20"/>
+      <xs:element name="comment" type="xs:string" minOccurs="0"/>
+    </xs:sequence>
+    <xs:attribute name="channel" type="xs:token"/>
+    <xs:attribute name="discountCode" type="xs:token"/>
+  </xs:complexType>
+  <xs:complexType name="SingleSeatBookingType">
+    <xs:complexContent>
+      <xs:restriction base="cr:BookingType">
+        <xs:sequence>
+          <xs:element name="event" type="xs:string"/>
+          <xs:element name="seat" type="xs:token"/>
+        </xs:sequence>
+        <xs:attribute name="channel" type="xs:token" fixed="web"/>
+        <xs:attribute name="discountCode" use="prohibited"/>
+      </xs:restriction>
+    </xs:complexContent>
+  </xs:complexType>
+</xs:schema>

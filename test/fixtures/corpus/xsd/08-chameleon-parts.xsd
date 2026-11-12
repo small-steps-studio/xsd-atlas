@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified">
+  <xs:complexType name="SlotType">
+    <xs:sequence>
+      <xs:element name="start" type="xs:dateTime"/>
+      <xs:element name="minutes" type="DurationMinutesType"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:simpleType name="DurationMinutesType">
+    <xs:restriction base="xs:positiveInteger">
+      <xs:maxInclusive value="240"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="RoomCodeType">
+    <xs:restriction base="xs:string">
+      <xs:pattern value="R[0-9]{2}[A-C]"/>
+    </xs:restriction>
+  </xs:simpleType>
+</xs:schema>

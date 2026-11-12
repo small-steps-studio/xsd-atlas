@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Many namespaces: one root schema imports eight small schemas, each with its own namespace. -->
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
+           xmlns:mn="urn:example:multi:root"
+           xmlns:n1="urn:example:multi:n1" xmlns:n2="urn:example:multi:n2"
+           xmlns:n3="urn:example:multi:n3" xmlns:n4="urn:example:multi:n4"
+           xmlns:n5="urn:example:multi:n5" xmlns:n6="urn:example:multi:n6"
+           xmlns:n7="urn:example:multi:n7" xmlns:n8="urn:example:multi:n8"
+           targetNamespace="urn:example:multi:root"
+           elementFormDefault="qualified">
+  <xs:import namespace="urn:example:multi:n1" schemaLocation="20-ns-01.xsd"/>
+  <xs:import namespace="urn:example:multi:n2" schemaLocation="20-ns-02.xsd"/>
+  <xs:import namespace="urn:example:multi:n3" schemaLocation="20-ns-03.xsd"/>
+  <xs:import namespace="urn:example:multi:n4" schemaLocation="20-ns-04.xsd"/>
+  <xs:import namespace="urn:example:multi:n5" schemaLocation="20-ns-05.xsd"/>
+  <xs:import namespace="urn:example:multi:n6" schemaLocation="20-ns-06.xsd"/>
+  <xs:import namespace="urn:example:multi:n7" schemaLocation="20-ns-07.xsd"/>
+  <xs:import namespace="urn:example:multi:n8" schemaLocation="20-ns-08.xsd"/>
+  <xs:element name="travelPlan">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element name="traveller" type="n1:TravellerType"/>
+        <xs:element name="flight" type="n2:FlightType" minOccurs="0" maxOccurs="4"/>
+        <xs:element name="hotel" type="n3:HotelType" minOccurs="0"/>
+        <xs:element name="car" type="n4:CarHireType" minOccurs="0"/>
+        <xs:element name="insurance" type="n5:InsuranceType" minOccurs="0"/>
+        <xs:element name="budget" type="n6:BudgetType"/>
+        <xs:element ref="n7:note" minOccurs="0" maxOccurs="unbounded"/>
+        <xs:element name="approval" type="n8:ApprovalType"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+</xs:schema>

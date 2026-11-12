@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- List and union types, named and inline. -->
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
+           xmlns:lu="urn:example:lists:unions"
+           targetNamespace="urn:example:lists:unions">
+  <xs:element name="survey">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element name="scores" type="lu:ScoreListType"/>
+        <xs:element name="answer" type="lu:AnswerType" maxOccurs="unbounded"/>
+        <xs:element name="weekdays">
+          <xs:simpleType>
+            <xs:list>
+              <xs:simpleType>
+                <xs:restriction base="xs:token">
+                  <xs:enumeration value="mon"/>
+                  <xs:enumeration value="tue"/>
+                  <xs:enumeration value="wed"/>
+                  <xs:enumeration value="thu"/>
+                  <xs:enumeration value="fri"/>
+                </xs:restriction>
+              </xs:simpleType>
+            </xs:list>
+          </xs:simpleType>
+        </xs:element>
+        <xs:element name="limit" type="lu:LimitType"/>
+        <xs:element name="keywords" type="xs:NMTOKENS"/>
+      </xs:sequence>
+      <xs:attribute name="respondents" type="lu:ShortScoreListType"/>
+    </xs:complexType>
+  </xs:element>
+  <xs:simpleType name="ScoreType">
+    <xs:restriction base="xs:integer">
+      <xs:minInclusive value="1"/>
+      <xs:maxInclusive value="5"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="ScoreListType">
+    <xs:list itemType="lu:ScoreType"/>
+  </xs:simpleType>
+  <xs:simpleType name="ShortScoreListType">
+    <xs:restriction base="lu:ScoreListType">
+      <xs:minLength value="1"/>
+      <xs:maxLength value="3"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="AnswerType">
+    <xs:union memberTypes="lu:ScoreType xs:boolean">
+      <xs:simpleType>
+        <xs:restriction base="xs:token">
+          <xs:enumeration value="skipped"/>
+        </xs:restriction>
+      </xs:simpleType>
+    </xs:union>
+  </xs:simpleType>
+  <xs:simpleType name="LimitType">
+    <xs:union>
+      <xs:simpleType>
+        <xs:restriction base="xs:positiveInteger"/>
+      </xs:simpleType>
+      <xs:simpleType>
+        <xs:restriction base="xs:string">
+          <xs:enumeration value="none"/>
+        </xs:restriction>
+      </xs:simpleType>
+    </xs:union>
+  </xs:simpleType>
+</xs:schema>

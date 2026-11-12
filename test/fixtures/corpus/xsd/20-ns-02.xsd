@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:n2="urn:example:multi:n2" targetNamespace="urn:example:multi:n2" elementFormDefault="qualified">
+  <xs:complexType name="FlightType">
+    <xs:sequence>
+      <xs:element name="flightNumber" type="xs:token"/>
+      <xs:element name="departs" type="xs:dateTime"/>
+      <xs:element name="cabin" default="economy">
+        <xs:simpleType>
+          <xs:restriction base="xs:token">
+            <xs:enumeration value="economy"/>
+            <xs:enumeration value="business"/>
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:element>
+    </xs:sequence>
+  </xs:complexType>
+</xs:schema>

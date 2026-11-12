@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Russian doll style: one global element, every type nested and anonymous. -->
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
+           xmlns:bk="urn:example:bakery:order:1"
+           targetNamespace="urn:example:bakery:order:1"
+           elementFormDefault="qualified" version="1.4">
+  <xs:element name="bakeryOrder">
+    <xs:annotation>
+      <xs:documentation>An order for baked goods placed by a cafe with a neighbourhood bakery.</xs:documentation>
+    </xs:annotation>
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element name="orderNumber">
+          <xs:simpleType>
+            <xs:restriction base="xs:string">
+              <xs:pattern value="BO-[0-9]{6}"/>
+            </xs:restriction>
+          </xs:simpleType>
+        </xs:element>
+        <xs:element name="placedAt" type="xs:dateTime"/>
+        <xs:element name="customer">
+          <xs:complexType>
+            <xs:sequence>
+              <xs:element name="name" type="xs:string"/>
+              <xs:element name="email" type="xs:string" minOccurs="0"/>
+              <xs:element name="deliveryWindow" minOccurs="0">
+                <xs:complexType>
+                  <xs:attribute name="from" type="xs:time" use="required"/>
+                  <xs:attribute name="to" type="xs:time" use="required"/>
+                </xs:complexType>
+              </xs:element>
+            </xs:sequence>
+            <xs:attribute name="accountId" type="xs:token" use="required"/>
+          </xs:complexType>
+        </xs:element>
+        <xs:element name="lines">
+          <xs:complexType>
+            <xs:sequence>
+              <xs:element name="line" maxOccurs="unbounded">
+                <xs:complexType>
+                  <xs:sequence>
+                    <xs:element name="product">
+                      <xs:simpleType>
+                        <xs:restriction base="xs:string">
+                          <xs:enumeration value="sourdough"/>
+                          <xs:enumeration value="rye"/>
+                          <xs:enumeration value="croissant"/>
+                          <xs:enumeration value="cinnamon-roll"/>
+                        </xs:restriction>
+                      </xs:simpleType>
+                    </xs:element>
+                    <xs:element name="quantity">
+                      <xs:simpleType>
+                        <xs:restriction base="xs:positiveInteger">
+                          <xs:maxInclusive value="500"/>
+                        </xs:restriction>
+                      </xs:simpleType>
+                    </xs:element>
+                    <xs:element name="unitPrice">
+                      <xs:simpleType>
+                        <xs:restriction base="xs:decimal">
+                          <xs:minInclusive value="0"/>
+                          <xs:totalDigits value="7"/>
+                          <xs:fractionDigits value="2"/>
+                        </xs:restriction>
+                      </xs:simpleType>
+                    </xs:element>
+                    <xs:element name="note" type="xs:string" minOccurs="0"/>
+                  </xs:sequence>
+                  <xs:attribute name="number" type="xs:positiveInteger" use="required"/>
+                </xs:complexType>
+              </xs:element>
+            </xs:sequence>
+          </xs:complexType>
+        </xs:element>
+      </xs:sequence>
+      <xs:attribute name="currency" default="EUR">
+        <xs:simpleType>
+          <xs:restriction base="xs:string">
+            <xs:length value="3"/>
+            <xs:pattern value="[A-Z]{3}"/>
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:attribute>
+    </xs:complexType>
+  </xs:element>
+</xs:schema>

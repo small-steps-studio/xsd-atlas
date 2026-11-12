@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Element and attribute forms: defaults unqualified, overridden per declaration. -->
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
+           xmlns:fq="urn:example:forms:permit"
+           targetNamespace="urn:example:forms:permit"
+           elementFormDefault="unqualified" attributeFormDefault="unqualified">
+  <xs:element name="parkingPermit">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element name="plate" type="xs:token"/>
+        <xs:element name="zone" type="xs:token" form="qualified"/>
+        <xs:element name="validUntil" type="xs:date"/>
+      </xs:sequence>
+      <xs:attribute name="permitNo" type="xs:token" use="required"/>
+      <xs:attribute name="issuer" type="xs:token" form="qualified"/>
+    </xs:complexType>
+  </xs:element>
+</xs:schema>

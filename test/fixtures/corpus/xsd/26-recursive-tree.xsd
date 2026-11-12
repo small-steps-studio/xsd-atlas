@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- A recursive structure: categories contain categories. -->
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
+           xmlns:rt="urn:example:tree:categories"
+           targetNamespace="urn:example:tree:categories"
+           elementFormDefault="qualified">
+  <xs:element name="taxonomy">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element name="category" type="rt:CategoryType" maxOccurs="unbounded"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:complexType name="CategoryType">
+    <xs:sequence>
+      <xs:element name="label" type="xs:string"/>
+      <xs:element name="category" type="rt:CategoryType" minOccurs="0" maxOccurs="unbounded"/>
+    </xs:sequence>
+    <xs:attribute name="code" type="xs:token" use="required"/>
+  </xs:complexType>
+  <xs:element name="outline" type="rt:SectionType"/>
+  <xs:complexType name="SectionType">
+    <xs:sequence>
+      <xs:element name="heading" type="xs:string"/>
+      <xs:element ref="rt:subsection" minOccurs="0" maxOccurs="unbounded"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="subsection" type="rt:SectionType"/>
+</xs:schema>

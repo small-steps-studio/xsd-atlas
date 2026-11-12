@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
+           xmlns:a="urn:example:cycle:a"
+           xmlns:b="urn:example:cycle:b"
+           targetNamespace="urn:example:cycle:b"
+           elementFormDefault="qualified">
+  <xs:import namespace="urn:example:cycle:a" schemaLocation="07-cycle-a.xsd"/>
+  <xs:complexType name="MilestoneType">
+    <xs:sequence>
+      <xs:element name="label" type="xs:string"/>
+      <xs:element name="due" type="xs:date"/>
+      <xs:element name="owner" type="a:OwnerType" minOccurs="0"/>
+    </xs:sequence>
+  </xs:complexType>
+</xs:schema>

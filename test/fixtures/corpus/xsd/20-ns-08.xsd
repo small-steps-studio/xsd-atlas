@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:n8="urn:example:multi:n8" targetNamespace="urn:example:multi:n8" elementFormDefault="qualified">
+  <xs:complexType name="ApprovalType">
+    <xs:sequence>
+      <xs:element name="approver" type="xs:string"/>
+      <xs:element name="status" type="n8:StatusType"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:simpleType name="StatusType">
+    <xs:restriction base="xs:token">
+      <xs:enumeration value="pending"/>
+      <xs:enumeration value="approved"/>
+      <xs:enumeration value="declined"/>
+    </xs:restriction>
+  </xs:simpleType>
+</xs:schema>
