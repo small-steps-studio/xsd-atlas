@@ -1,0 +1,65 @@
+name: Tests and package
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  unit:
+    name: Unit tests (${{ matrix.os }}, Node ${{ matrix.node }})
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, windows-latest, macos-latest]
+        node: [20, 22]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node }}
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Independent schema validator for the sample round trips (test only)
+        run: python -m pip install lxml
+      - name: Unit, corpus, diff and fuzz tests
+        run: npm test
+      - name: Tests in a second time zone
+        run: npm test
+        env:
+          TZ: Pacific/Auckland
+      - name: Tests from a path with spaces and non-ASCII characters
+        shell: bash
+        run: |
+          target="$RUNNER_TEMP/xsd atlas prüfung ☃"
+          mkdir -p "$target"
+          cp -R . "$target"
+          cd "$target"
+          npm test
+
+  package:
+    name: Release gate and package
+    runs-on: ubuntu-latest
+    needs: unit
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - name: Release gate
+        run: node scripts/release-gate.js --skip-tests
+      - name: Package
+        run: npx --yes @vscode/vsce package --no-dependencies
+      - name: Check the package contents
+        run: node scripts/check-vsix.js
+      - uses: actions/upload-artifact@v4
+        with:
+          name: vsix
+          path: "*.vsix"
+          retention-days: 14
