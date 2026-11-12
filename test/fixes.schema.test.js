@@ -5,6 +5,7 @@
 const test = require('node:test');
 const assert = require('node:assert/strict');
 const fs = require('node:fs');
+const http = require('node:http');
 const os = require('node:os');
 const path = require('node:path');
 const cp = require('node:child_process');
@@ -282,6 +283,58 @@ test('oracle: schema and instance paths with spaces and non-ASCII characters are
     assert.equal(answer.schemas[xsd], '');
     assert.equal(answer.instances[0].error, '');
   } finally {
+    fs.rmSync(dir, { recursive: true, force: true });
+  }
+});
+
+test('oracle: the schema of the XML namespace comes from a local file and no web address is ever fetched', { skip: !oracleAvailable() && 'the lxml package for Python is not installed' }, async () => {
+  // A logging web server stands in for every address: the oracle gets it as its HTTP proxy as well,
+  // so a fetch of the real address of the XML namespace schema would be seen here too.
+  const hits = [];
+  const server = http.createServer((req, res) => { hits.push(req.url); res.statusCode = 404; res.end(); });
+  await new Promise((resolve) => server.listen(0, '127.0.0.1', resolve));
+  const port = server.address().port;
+  const dir = fs.mkdtempSync(path.join(os.tmpdir(), 'xsdatlas-xmlns-'));
+  try {
+    const head = '<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xml="http://www.w3.org/XML/1998/namespace" xmlns:t="urn:t" targetNamespace="urn:t" elementFormDefault="qualified">';
+    const withXml = path.join(dir, 'with-xml.xsd');
+    fs.writeFileSync(withXml, head + '<xs:import namespace="http://www.w3.org/XML/1998/namespace" schemaLocation="http://www.w3.org/2001/xml.xsd"/>' +
+      '<xs:element name="p"><xs:complexType><xs:simpleContent><xs:extension base="xs:string"><xs:attribute ref="xml:lang" use="required"/><xs:attribute ref="xml:space"/></xs:extension></xs:simpleContent></xs:complexType></xs:element></xs:schema>');
+    const withFar = path.join(dir, 'with-far.xsd');
+    fs.writeFileSync(withFar, head + '<xs:import namespace="urn:far" schemaLocation="http://127.0.0.1:' + port + '/far.xsd"/><xs:element name="q" type="xs:string"/></xs:schema>');
+    const docs = {
+      good: '<p xmlns="urn:t" xml:lang="de-AT" xml:space="preserve">x</p>',
+      empty: '<p xmlns="urn:t" xml:lang="">x</p>',
+      missing: '<p xmlns="urn:t">x</p>',
+      badLang: '<p xmlns="urn:t" xml:lang="not a tag!">x</p>',
+      badSpace: '<p xmlns="urn:t" xml:lang="en" xml:space="squeeze">x</p>'
+    };
+    const instances = [];
+    for (const [name, text] of Object.entries(docs)) {
+      fs.writeFileSync(path.join(dir, name + '.xml'), text);
+      instances.push([withXml, path.join(dir, name + '.xml')]);
+    }
+    const request = JSON.stringify({ schemas: [withXml, withFar], instances: instances });
+    const proxy = 'http://127.0.0.1:' + port;
+    const env = Object.assign({}, process.env, { http_proxy: proxy, HTTP_PROXY: proxy, https_proxy: proxy, HTTPS_PROXY: proxy, no_proxy: '', NO_PROXY: '' });
+    const answer = await new Promise((resolve, reject) => {
+      const child = cp.spawn('python', [path.join(__dirname, 'helpers', 'oracle.py')], { env: env, windowsHide: true });
+      const out = [];
+      const err = [];
+      child.stdout.on('data', (d) => out.push(d));
+      child.stderr.on('data', (d) => err.push(d));
+      child.on('error', reject);
+      child.on('close', (code) => (code === 0 ? resolve(JSON.parse(Buffer.concat(out).toString('utf8'))) : reject(new Error(Buffer.concat(err).toString('utf8')))));
+      child.stdin.end(request);
+    });
+    assert.deepEqual(hits, [], 'nothing was requested from any web address');
+    assert.equal(answer.schemas[withXml], '', 'the schema that imports the XML namespace schema is accepted');
+    assert.equal(typeof answer.schemas[withFar], 'string', 'the schema with an import from another web address was answered without fetching it');
+    const byName = {};
+    Object.keys(docs).forEach((name, i) => { byName[name] = answer.instances[i].error === ''; });
+    assert.deepEqual(byName, { good: true, empty: true, missing: false, badLang: false, badSpace: false }, 'the imported declarations are really applied');
+  } finally {
+    await new Promise((resolve) => server.close(resolve));
     fs.rmSync(dir, { recursive: true, force: true });
   }
 });
