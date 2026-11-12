@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- wsdl:import: messages and port type live in another WSDL document. -->
+<wsdl:definitions xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/"
+                  xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/"
+                  xmlns:def="urn:example:tickets:defs"
+                  xmlns:tns="urn:example:tickets:binding"
+                  targetNamespace="urn:example:tickets:binding">
+  <wsdl:import namespace="urn:example:tickets:defs" location="w08-import-defs.wsdl"/>
+  <wsdl:binding name="TicketBinding" type="def:TicketPort">
+    <soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+    <wsdl:operation name="OpenTicket">
+      <soap:operation soapAction="OpenTicket"/>
+      <wsdl:input><soap:body use="literal"/></wsdl:input>
+      <wsdl:output><soap:body use="literal"/></wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:service name="TicketService">
+    <wsdl:port name="TicketPort" binding="tns:TicketBinding"><soap:address location="https://helpdesk.example.com/tickets"/></wsdl:port>
+  </wsdl:service>
+</wsdl:definitions>

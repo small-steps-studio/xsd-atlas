@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Document/literal wrapped, SOAP 1.1, one embedded schema. -->
+<wsdl:definitions xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/"
+                  xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/"
+                  xmlns:xs="http://www.w3.org/2001/XMLSchema"
+                  xmlns:tns="urn:example:weather:service"
+                  targetNamespace="urn:example:weather:service" name="WeatherService">
+  <wsdl:types>
+    <xs:schema targetNamespace="urn:example:weather:service" elementFormDefault="qualified">
+      <xs:element name="GetForecast">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element name="stationCode" type="xs:token"/>
+            <xs:element name="days" type="xs:positiveInteger" minOccurs="0"/>
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+      <xs:element name="GetForecastResponse">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element name="day" maxOccurs="unbounded">
+              <xs:complexType>
+                <xs:sequence>
+                  <xs:element name="date" type="xs:date"/>
+                  <xs:element name="highCelsius" type="xs:decimal"/>
+                  <xs:element name="lowCelsius" type="xs:decimal"/>
+                  <xs:element name="summary" type="xs:string"/>
+                </xs:sequence>
+              </xs:complexType>
+            </xs:element>
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+    </xs:schema>
+  </wsdl:types>
+  <wsdl:message name="GetForecastRequest">
+    <wsdl:part name="parameters" element="tns:GetForecast"/>
+  </wsdl:message>
+  <wsdl:message name="GetForecastResponse">
+    <wsdl:part name="parameters" element="tns:GetForecastResponse"/>
+  </wsdl:message>
+  <wsdl:portType name="WeatherPort">
+    <wsdl:operation name="GetForecast">
+      <wsdl:input message="tns:GetForecastRequest"/>
+      <wsdl:output message="tns:GetForecastResponse"/>
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:binding name="WeatherSoapBinding" type="tns:WeatherPort">
+    <soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+    <wsdl:operation name="GetForecast">
+      <soap:operation soapAction="urn:example:weather:GetForecast"/>
+      <wsdl:input><soap:body use="literal"/></wsdl:input>
+      <wsdl:output><soap:body use="literal"/></wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:service name="WeatherService">
+    <wsdl:port name="WeatherPort" binding="tns:WeatherSoapBinding">
+      <soap:address location="https://weather.example.com/soap"/>
+    </wsdl:port>
+  </wsdl:service>
+</wsdl:definitions>

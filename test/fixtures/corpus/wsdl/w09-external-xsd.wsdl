@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- The embedded schema imports an external XSD file next to the WSDL. -->
+<wsdl:definitions xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/"
+                  xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/"
+                  xmlns:xs="http://www.w3.org/2001/XMLSchema"
+                  xmlns:msg="urn:example:rates:messages"
+                  xmlns:tns="urn:example:rates:service"
+                  targetNamespace="urn:example:rates:service">
+  <wsdl:types>
+    <xs:schema targetNamespace="urn:example:rates:service">
+      <xs:import namespace="urn:example:rates:messages" schemaLocation="w09-types.xsd"/>
+    </xs:schema>
+  </wsdl:types>
+  <wsdl:message name="QuoteIn"><wsdl:part name="p" element="msg:QuoteRequest"/></wsdl:message>
+  <wsdl:message name="QuoteOut"><wsdl:part name="p" element="msg:Quote"/></wsdl:message>
+  <wsdl:portType name="RatesPort">
+    <wsdl:operation name="GetQuote"><wsdl:input message="tns:QuoteIn"/><wsdl:output message="tns:QuoteOut"/></wsdl:operation>
+  </wsdl:portType>
+  <wsdl:binding name="RatesBinding" type="tns:RatesPort">
+    <soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+    <wsdl:operation name="GetQuote"><soap:operation soapAction="GetQuote"/><wsdl:input><soap:body use="literal"/></wsdl:input><wsdl:output><soap:body use="literal"/></wsdl:output></wsdl:operation>
+  </wsdl:binding>
+  <wsdl:service name="RatesService">
+    <wsdl:port name="RatesPort" binding="tns:RatesBinding"><soap:address location="https://rates.example.com/soap"/></wsdl:port>
+  </wsdl:service>
+</wsdl:definitions>

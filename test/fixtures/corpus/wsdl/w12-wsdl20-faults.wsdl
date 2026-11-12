@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- WSDL 2.0 with interface faults referenced by outfault, and an extended interface. -->
+<description xmlns="http://www.w3.org/ns/wsdl"
+             xmlns:wsoap="http://www.w3.org/ns/wsdl/soap"
+             xmlns:xs="http://www.w3.org/2001/XMLSchema"
+             xmlns:tns="urn:example:bookings:hotel"
+             targetNamespace="urn:example:bookings:hotel">
+  <types>
+    <xs:schema targetNamespace="urn:example:bookings:hotel" elementFormDefault="qualified">
+      <xs:element name="Book">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element name="hotelCode" type="xs:token"/>
+            <xs:element name="checkIn" type="xs:date"/>
+            <xs:element name="nights" type="xs:positiveInteger"/>
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+      <xs:element name="Booked"><xs:complexType><xs:sequence><xs:element name="confirmation" type="xs:token"/></xs:sequence></xs:complexType></xs:element>
+      <xs:element name="NoAvailability"><xs:complexType><xs:sequence><xs:element name="nextFreeDate" type="xs:date" minOccurs="0"/></xs:sequence></xs:complexType></xs:element>
+      <xs:element name="Ping" type="xs:string"/>
+    </xs:schema>
+  </types>
+  <interface name="BaseInterface">
+    <operation name="Ping" pattern="http://www.w3.org/ns/wsdl/in-only">
+      <input element="tns:Ping"/>
+    </operation>
+  </interface>
+  <interface name="BookingInterface" extends="tns:BaseInterface">
+    <fault name="NoAvailabilityFault" element="tns:NoAvailability"/>
+    <operation name="Book" pattern="http://www.w3.org/ns/wsdl/in-out">
+      <input element="tns:Book"/>
+      <output element="tns:Booked"/>
+      <outfault ref="tns:NoAvailabilityFault"/>
+    </operation>
+  </interface>
+  <binding name="BookingSoap" interface="tns:BookingInterface" type="http://www.w3.org/ns/wsdl/soap" wsoap:protocol="http://www.w3.org/2003/05/soap/bindings/HTTP/">
+    <operation ref="tns:Book" wsoap:action="urn:example:bookings:Book"/>
+  </binding>
+  <service name="BookingService" interface="tns:BookingInterface">
+    <endpoint name="BookingEndpoint" binding="tns:BookingSoap" address="https://hotel.example.com/book"/>
+  </service>
+</description>

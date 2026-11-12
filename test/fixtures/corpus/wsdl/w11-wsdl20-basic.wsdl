@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- WSDL 2.0 with an in-out operation and a SOAP 1.2 binding. -->
+<description xmlns="http://www.w3.org/ns/wsdl"
+             xmlns:wsoap="http://www.w3.org/ns/wsdl/soap"
+             xmlns:xs="http://www.w3.org/2001/XMLSchema"
+             xmlns:tns="urn:example:greenhouse:control"
+             targetNamespace="urn:example:greenhouse:control">
+  <types>
+    <xs:schema targetNamespace="urn:example:greenhouse:control" elementFormDefault="qualified">
+      <xs:element name="SetVent">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element name="ventId" type="xs:token"/>
+            <xs:element name="openPercent">
+              <xs:simpleType><xs:restriction base="xs:int"><xs:minInclusive value="0"/><xs:maxInclusive value="100"/></xs:restriction></xs:simpleType>
+            </xs:element>
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+      <xs:element name="VentState">
+        <xs:complexType><xs:sequence><xs:element name="openPercent" type="xs:int"/></xs:sequence></xs:complexType>
+      </xs:element>
+    </xs:schema>
+  </types>
+  <interface name="ControlInterface">
+    <operation name="SetVent" pattern="http://www.w3.org/ns/wsdl/in-out">
+      <input messageLabel="In" element="tns:SetVent"/>
+      <output messageLabel="Out" element="tns:VentState"/>
+    </operation>
+  </interface>
+  <binding name="ControlSoap" interface="tns:ControlInterface" type="http://www.w3.org/ns/wsdl/soap" wsoap:protocol="http://www.w3.org/2003/05/soap/bindings/HTTP/">
+    <operation ref="tns:SetVent" wsoap:action="urn:example:greenhouse:SetVent"/>
+  </binding>
+  <service name="ControlService" interface="tns:ControlInterface">
+    <endpoint name="ControlEndpoint" binding="tns:ControlSoap" address="https://greenhouse.example.com/control"/>
+  </service>
+</description>

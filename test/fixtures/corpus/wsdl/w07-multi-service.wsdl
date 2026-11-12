@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Two port types, two bindings, two services. -->
+<wsdl:definitions xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/"
+                  xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/"
+                  xmlns:xs="http://www.w3.org/2001/XMLSchema"
+                  xmlns:tns="urn:example:library:ops"
+                  targetNamespace="urn:example:library:ops">
+  <wsdl:types>
+    <xs:schema targetNamespace="urn:example:library:ops" elementFormDefault="qualified">
+      <xs:element name="Reserve"><xs:complexType><xs:sequence><xs:element name="isbn" type="xs:token"/><xs:element name="member" type="xs:token"/></xs:sequence></xs:complexType></xs:element>
+      <xs:element name="ReserveResult"><xs:complexType><xs:sequence><xs:element name="position" type="xs:positiveInteger"/></xs:sequence></xs:complexType></xs:element>
+      <xs:element name="Search"><xs:complexType><xs:sequence><xs:element name="query" type="xs:string"/><xs:element name="page" type="xs:positiveInteger" default="1"/></xs:sequence></xs:complexType></xs:element>
+      <xs:element name="SearchResult"><xs:complexType><xs:sequence><xs:element name="hit" minOccurs="0" maxOccurs="50"><xs:complexType><xs:attribute name="isbn" type="xs:token" use="required"/><xs:attribute name="title" type="xs:string" use="required"/></xs:complexType></xs:element></xs:sequence></xs:complexType></xs:element>
+    </xs:schema>
+  </wsdl:types>
+  <wsdl:message name="ReserveIn"><wsdl:part name="p" element="tns:Reserve"/></wsdl:message>
+  <wsdl:message name="ReserveOut"><wsdl:part name="p" element="tns:ReserveResult"/></wsdl:message>
+  <wsdl:message name="SearchIn"><wsdl:part name="p" element="tns:Search"/></wsdl:message>
+  <wsdl:message name="SearchOut"><wsdl:part name="p" element="tns:SearchResult"/></wsdl:message>
+  <wsdl:portType name="CirculationPort">
+    <wsdl:operation name="Reserve"><wsdl:input message="tns:ReserveIn"/><wsdl:output message="tns:ReserveOut"/></wsdl:operation>
+  </wsdl:portType>
+  <wsdl:portType name="CataloguePort">
+    <wsdl:operation name="Search"><wsdl:input message="tns:SearchIn"/><wsdl:output message="tns:SearchOut"/></wsdl:operation>
+  </wsdl:portType>
+  <wsdl:binding name="CirculationBinding" type="tns:CirculationPort">
+    <soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+    <wsdl:operation name="Reserve"><soap:operation soapAction="Reserve"/><wsdl:input><soap:body use="literal"/></wsdl:input><wsdl:output><soap:body use="literal"/></wsdl:output></wsdl:operation>
+  </wsdl:binding>
+  <wsdl:binding name="CatalogueBinding" type="tns:CataloguePort">
+    <soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+    <wsdl:operation name="Search"><soap:operation soapAction="Search"/><wsdl:input><soap:body use="literal"/></wsdl:input><wsdl:output><soap:body use="literal"/></wsdl:output></wsdl:operation>
+  </wsdl:binding>
+  <wsdl:service name="CirculationService">
+    <wsdl:port name="CirculationPort" binding="tns:CirculationBinding"><soap:address location="https://lib.example.com/circulation"/></wsdl:port>
+  </wsdl:service>
+  <wsdl:service name="CatalogueService">
+    <wsdl:port name="CataloguePort" binding="tns:CatalogueBinding"><soap:address location="https://lib.example.com/catalogue"/></wsdl:port>
+  </wsdl:service>
+</wsdl:definitions>

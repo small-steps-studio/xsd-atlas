@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Two embedded schemas; the second imports the first by namespace only. -->
+<wsdl:definitions xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/"
+                  xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/"
+                  xmlns:xs="http://www.w3.org/2001/XMLSchema"
+                  xmlns:cm="urn:example:parking:common"
+                  xmlns:tns="urn:example:parking:service"
+                  targetNamespace="urn:example:parking:service">
+  <wsdl:types>
+    <xs:schema targetNamespace="urn:example:parking:common" elementFormDefault="qualified">
+      <xs:simpleType name="PlateType"><xs:restriction base="xs:token"><xs:maxLength value="10"/></xs:restriction></xs:simpleType>
+      <xs:complexType name="ZoneType"><xs:attribute name="code" type="xs:token" use="required"/></xs:complexType>
+    </xs:schema>
+    <xs:schema targetNamespace="urn:example:parking:service" elementFormDefault="qualified">
+      <xs:import namespace="urn:example:parking:common"/>
+      <xs:element name="StartSession">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element name="plate" type="cm:PlateType"/>
+            <xs:element name="zone" type="cm:ZoneType"/>
+            <xs:element name="minutes" type="xs:positiveInteger"/>
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+      <xs:element name="SessionStarted">
+        <xs:complexType><xs:sequence><xs:element name="sessionId" type="xs:token"/><xs:element name="endsAt" type="xs:dateTime"/></xs:sequence></xs:complexType>
+      </xs:element>
+    </xs:schema>
+  </wsdl:types>
+  <wsdl:message name="StartIn"><wsdl:part name="p" element="tns:StartSession"/></wsdl:message>
+  <wsdl:message name="StartOut"><wsdl:part name="p" element="tns:SessionStarted"/></wsdl:message>
+  <wsdl:portType name="ParkingPort">
+    <wsdl:operation name="StartSession"><wsdl:input message="tns:StartIn"/><wsdl:output message="tns:StartOut"/></wsdl:operation>
+  </wsdl:portType>
+  <wsdl:binding name="ParkingBinding" type="tns:ParkingPort">
+    <soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+    <wsdl:operation name="StartSession"><soap:operation soapAction="StartSession"/><wsdl:input><soap:body use="literal"/></wsdl:input><wsdl:output><soap:body use="literal"/></wsdl:output></wsdl:operation>
+  </wsdl:binding>
+  <wsdl:service name="ParkingService">
+    <wsdl:port name="ParkingPort" binding="tns:ParkingBinding"><soap:address location="https://parking.example.com/soap"/></wsdl:port>
+  </wsdl:service>
+</wsdl:definitions>

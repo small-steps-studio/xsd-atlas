@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- SOAP headers from a separate message part, and two declared faults. -->
+<wsdl:definitions xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/"
+                  xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/"
+                  xmlns:xs="http://www.w3.org/2001/XMLSchema"
+                  xmlns:tns="urn:example:orders:svc"
+                  targetNamespace="urn:example:orders:svc">
+  <wsdl:types>
+    <xs:schema targetNamespace="urn:example:orders:svc" elementFormDefault="qualified">
+      <xs:element name="Credentials">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element name="clientId" type="xs:token"/>
+            <xs:element name="signature" type="xs:base64Binary"/>
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+      <xs:element name="SubmitOrder">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element name="orderRef" type="xs:token"/>
+            <xs:element name="item" maxOccurs="unbounded">
+              <xs:complexType>
+                <xs:attribute name="sku" type="xs:token" use="required"/>
+                <xs:attribute name="qty" type="xs:positiveInteger" use="required"/>
+              </xs:complexType>
+            </xs:element>
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+      <xs:element name="SubmitOrderAck">
+        <xs:complexType>
+          <xs:sequence><xs:element name="accepted" type="xs:boolean"/></xs:sequence>
+        </xs:complexType>
+      </xs:element>
+      <xs:element name="OutOfStock">
+        <xs:complexType>
+          <xs:sequence><xs:element name="sku" type="xs:token" maxOccurs="unbounded"/></xs:sequence>
+        </xs:complexType>
+      </xs:element>
+      <xs:element name="NotAuthorised" type="xs:string"/>
+    </xs:schema>
+  </wsdl:types>
+  <wsdl:message name="SubmitOrderIn">
+    <wsdl:part name="body" element="tns:SubmitOrder"/>
+    <wsdl:part name="auth" element="tns:Credentials"/>
+  </wsdl:message>
+  <wsdl:message name="SubmitOrderOut"><wsdl:part name="body" element="tns:SubmitOrderAck"/></wsdl:message>
+  <wsdl:message name="OutOfStockFault"><wsdl:part name="detail" element="tns:OutOfStock"/></wsdl:message>
+  <wsdl:message name="NotAuthorisedFault"><wsdl:part name="detail" element="tns:NotAuthorised"/></wsdl:message>
+  <wsdl:portType name="OrderPort">
+    <wsdl:operation name="SubmitOrder">
+      <wsdl:input message="tns:SubmitOrderIn"/>
+      <wsdl:output message="tns:SubmitOrderOut"/>
+      <wsdl:fault name="OutOfStock" message="tns:OutOfStockFault"/>
+      <wsdl:fault name="NotAuthorised" message="tns:NotAuthorisedFault"/>
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:binding name="OrderBinding" type="tns:OrderPort">
+    <soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+    <wsdl:operation name="SubmitOrder">
+      <soap:operation soapAction="urn:example:orders:Submit"/>
+      <wsdl:input>
+        <soap:header message="tns:SubmitOrderIn" part="auth" use="literal"/>
+        <soap:body use="literal" parts="body"/>
+      </wsdl:input>
+      <wsdl:output><soap:body use="literal"/></wsdl:output>
+      <wsdl:fault name="OutOfStock"><soap:fault name="OutOfStock" use="literal"/></wsdl:fault>
+      <wsdl:fault name="NotAuthorised"><soap:fault name="NotAuthorised" use="literal"/></wsdl:fault>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:service name="OrderService">
+    <wsdl:port name="OrderPort" binding="tns:OrderBinding"><soap:address location="https://orders.example.com/svc"/></wsdl:port>
+  </wsdl:service>
+</wsdl:definitions>

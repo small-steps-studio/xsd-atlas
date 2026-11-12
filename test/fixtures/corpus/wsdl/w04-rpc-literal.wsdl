@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- RPC/literal: parts with types, body namespace on soap:body. -->
+<wsdl:definitions xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/"
+                  xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/"
+                  xmlns:xs="http://www.w3.org/2001/XMLSchema"
+                  xmlns:tns="urn:example:calc:rpc"
+                  targetNamespace="urn:example:calc:rpc">
+  <wsdl:types>
+    <xs:schema targetNamespace="urn:example:calc:rpc">
+      <xs:complexType name="OperandsType">
+        <xs:sequence>
+          <xs:element name="left" type="xs:decimal"/>
+          <xs:element name="right" type="xs:decimal"/>
+        </xs:sequence>
+      </xs:complexType>
+    </xs:schema>
+  </wsdl:types>
+  <wsdl:message name="AddRequest">
+    <wsdl:part name="operands" type="tns:OperandsType"/>
+    <wsdl:part name="precision" type="xs:int"/>
+  </wsdl:message>
+  <wsdl:message name="AddResponse">
+    <wsdl:part name="result" type="xs:decimal"/>
+  </wsdl:message>
+  <wsdl:portType name="CalcPort">
+    <wsdl:operation name="Add">
+      <wsdl:input message="tns:AddRequest"/>
+      <wsdl:output message="tns:AddResponse"/>
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:binding name="CalcRpc" type="tns:CalcPort">
+    <soap:binding style="rpc" transport="http://schemas.xmlsoap.org/soap/http"/>
+    <wsdl:operation name="Add">
+      <soap:operation soapAction="urn:example:calc:Add"/>
+      <wsdl:input><soap:body use="literal" namespace="urn:example:calc:rpc"/></wsdl:input>
+      <wsdl:output><soap:body use="literal" namespace="urn:example:calc:rpc"/></wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:service name="CalcService">
+    <wsdl:port name="CalcPort" binding="tns:CalcRpc"><soap:address location="https://calc.example.com/rpc"/></wsdl:port>
+  </wsdl:service>
+</wsdl:definitions>

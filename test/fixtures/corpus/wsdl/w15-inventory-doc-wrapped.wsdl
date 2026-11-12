@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Document/literal wrapped with several operations sharing types, choice and optional parts. -->
+<wsdl:definitions xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/"
+                  xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/"
+                  xmlns:xs="http://www.w3.org/2001/XMLSchema"
+                  xmlns:inv="urn:example:inventory:2"
+                  targetNamespace="urn:example:inventory:2">
+  <wsdl:documentation>Stock levels for a chain of hardware shops (invented service).</wsdl:documentation>
+  <wsdl:types>
+    <xs:schema targetNamespace="urn:example:inventory:2" elementFormDefault="qualified">
+      <xs:complexType name="StockLevelType">
+        <xs:sequence>
+          <xs:element name="sku" type="xs:token"/>
+          <xs:element name="onHand" type="xs:nonNegativeInteger"/>
+          <xs:element name="reserved" type="xs:nonNegativeInteger" minOccurs="0"/>
+        </xs:sequence>
+        <xs:attribute name="shop" type="xs:token" use="required"/>
+      </xs:complexType>
+      <xs:element name="GetStock">
+        <xs:complexType>
+          <xs:choice>
+            <xs:element name="sku" type="xs:token" maxOccurs="100"/>
+            <xs:element name="category" type="xs:token"/>
+          </xs:choice>
+        </xs:complexType>
+      </xs:element>
+      <xs:element name="GetStockResponse">
+        <xs:complexType><xs:sequence><xs:element name="level" type="inv:StockLevelType" minOccurs="0" maxOccurs="unbounded"/></xs:sequence></xs:complexType>
+      </xs:element>
+      <xs:element name="AdjustStock">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element name="level" type="inv:StockLevelType"/>
+            <xs:element name="reason">
+              <xs:simpleType><xs:restriction base="xs:token"><xs:enumeration value="delivery"/><xs:enumeration value="sale"/><xs:enumeration value="count"/></xs:restriction></xs:simpleType>
+            </xs:element>
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+      <xs:element name="AdjustStockResponse"><xs:complexType><xs:sequence><xs:element name="ok" type="xs:boolean"/></xs:sequence></xs:complexType></xs:element>
+    </xs:schema>
+  </wsdl:types>
+  <wsdl:message name="GetStockIn"><wsdl:part name="parameters" element="inv:GetStock"/></wsdl:message>
+  <wsdl:message name="GetStockOut"><wsdl:part name="parameters" element="inv:GetStockResponse"/></wsdl:message>
+  <wsdl:message name="AdjustStockIn"><wsdl:part name="parameters" element="inv:AdjustStock"/></wsdl:message>
+  <wsdl:message name="AdjustStockOut"><wsdl:part name="parameters" element="inv:AdjustStockResponse"/></wsdl:message>
+  <wsdl:portType name="InventoryPort">
+    <wsdl:operation name="GetStock"><wsdl:input message="inv:GetStockIn"/><wsdl:output message="inv:GetStockOut"/></wsdl:operation>
+    <wsdl:operation name="AdjustStock"><wsdl:input message="inv:AdjustStockIn"/><wsdl:output message="inv:AdjustStockOut"/></wsdl:operation>
+  </wsdl:portType>
+  <wsdl:binding name="InventoryBinding" type="inv:InventoryPort">
+    <soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+    <wsdl:operation name="GetStock"><soap:operation soapAction="urn:example:inventory:GetStock"/><wsdl:input><soap:body use="literal"/></wsdl:input><wsdl:output><soap:body use="literal"/></wsdl:output></wsdl:operation>
+    <wsdl:operation name="AdjustStock"><soap:operation soapAction="urn:example:inventory:AdjustStock"/><wsdl:input><soap:body use="literal"/></wsdl:input><wsdl:output><soap:body use="literal"/></wsdl:output></wsdl:operation>
+  </wsdl:binding>
+  <wsdl:service name="InventoryService">
+    <wsdl:port name="InventoryPort" binding="inv:InventoryBinding"><soap:address location="https://stock.example.com/v2"/></wsdl:port>
+  </wsdl:service>
+</wsdl:definitions>
